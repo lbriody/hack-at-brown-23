@@ -6,10 +6,22 @@ import {dalle, text} from "../OpenaiHandlers"
 
 function StoryPage() {
   
+    const [source, setSource] = useState<string>("");    
 
 
-    const source = await dalle("a fish flying over a rainbow")
-    
+    useEffect(() => {
+      dalle("A fish flying over the rainbow").then(
+        response => {
+          if (response == undefined) {
+            console.log("ERROR");
+          } else {
+            console.log("USEFFECT CALLED");
+            setSource(response);
+          }
+        }
+      )
+
+    });
 
     return (
       <Stack>
