@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
 import PostPage from '../post-page/PostPage'
-import {dalle, text} from "../OpenaiHandlers"
+import {dalle, text} from "../../OpenaiHandlers"
 
 
 function StoryPage() {
