@@ -1,2 +1,19 @@
-.idea/
+.idea
 out
+
+# dependencies
+frontend/ghostwriter/node_modules
+
+# production
+frontend/ghostwriter/build
+
+# misc
+frontend/ghostwriter/.DS_Store
+frontend/ghostwriter/.env.local
+frontend/ghostwriter/.env.development.local
+frontend/ghostwriter/.env.test.local
+frontend/ghostwriter/.env.production.local
+
+frontend/ghostwriter/npm-debug.log*
+frontend/ghostwriter/yarn-debug.log*
+frontend/ghostwriter/yarn-error.log*
