@@ -1,0 +1,13 @@
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\Handlers\TicketmasterHandler.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\Handlers\HandlerInterface.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\exceptions\TopArtistsFailureException.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\Server.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\exceptions\EventReceiptException.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\MoshiHelpers\spotify_request_structures\SingleTrackResponse.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\MoshiHelpers\ticketmaster_request_structures\EventResponse.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\Handlers\TopFiveGenres.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\utility\GenericResponseSerializer.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\utility\GenericAPICaller.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\Handlers\SpotifyHandler.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\MoshiHelpers\spotify_request_structures\TopArtistsResponse.java
+C:\ComputerScienceProjects\cs32\Final Project\term-project-cbobowic-ckim167-ehenrion-emuntean\backend\src\main\java\server\exceptions\TopGenreFailureException.java

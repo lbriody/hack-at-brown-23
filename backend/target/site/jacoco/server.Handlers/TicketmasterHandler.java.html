@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketmasterHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">moshi</a> &gt; <a href="index.source.html" class="el_package">server.Handlers</a> &gt; <span class="el_source">TicketmasterHandler.java</span></div><h1>TicketmasterHandler.java</h1><pre class="source lang-java linenums">package server.Handlers;
+
+import static server.utility.GenericResponseSerializer.serializeResponse;
+
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import server.exceptions.EventReceiptException;
+import server.MoshiHelpers.ticketmaster_request_structures.EventResponse;
+import server.exceptions.NoTicketmasterListingsException;
+import server.utility.GenericAPICaller;
+import server.utility.HandlerInterface;
+import spark.QueryParamsMap;
+import spark.Request;
+import spark.Response;
+
+import java.io.IOException;
+import java.util.*;
+
+<span class="nc" id="L19">public class TicketmasterHandler implements HandlerInterface {</span>
+
+
+    @Override
+    public String getPath() {
+<span class="nc" id="L24">        return &quot;ticketmaster&quot;;</span>
+    }
+
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+        // TO GET TOP 5 GENRES: TopFiveGenres.getTopFiveGenres();
+        //TODO: qm will need to be changed to city.
+        try {
+<span class="nc" id="L32">            QueryParamsMap qm = request.queryMap();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (!qm.hasKey(&quot;city&quot;)) {</span>
+<span class="nc" id="L34">                return serializeResponse(&quot;error_bad_request&quot;, null);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">            } else if (qm.get(&quot;city&quot;).value().equals(&quot;&quot;)) {</span>
+<span class="nc" id="L36">                return serializeResponse(&quot;error_invalid_token&quot;, null);</span>
+            }
+<span class="nc" id="L38">            System.out.println(qm.get(&quot;genres&quot;).value());</span>
+<span class="nc" id="L39">            String city = qm.value(&quot;city&quot;);</span>
+<span class="nc" id="L40">            String topGenres = qm.get(&quot;genres&quot;).value();</span>
+<span class="nc" id="L41">            return serializeResponse(&quot;success&quot;, this.getNearbyEvents(city, topGenres));</span>
+        }
+
+<span class="nc" id="L44">        catch (NoTicketmasterListingsException e) {</span>
+<span class="nc" id="L45">            return serializeResponse(&quot;error_no_listings&quot;, null);</span>
+        }
+    }
+
+
+    private List&lt;HashMap&lt;String, Object&gt;&gt; getNearbyEvents(String city, String topGenres) throws Exception {
+<span class="nc" id="L51">        List&lt;HashMap&lt;String, Object&gt;&gt; names = new ArrayList&lt;&gt;();</span>
+//        String[] genres = TopFiveGenres.getTopFiveGenres();
+<span class="nc" id="L53">        JsonAdapter&lt;String[]&gt; adapter1 = new Moshi.Builder().build()</span>
+<span class="nc" id="L54">            .adapter(String[].class);</span>
+
+<span class="nc" id="L56">        String[] genres = adapter1.fromJson(topGenres);</span>
+<span class="nc" id="L57">        System.out.println(genres);</span>
+
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (genres == null) {</span>
+<span class="nc" id="L60">            throw new NoTicketmasterListingsException(&quot;No genres&quot;);</span>
+        }
+<span class="nc" id="L62">        Set&lt;String&gt; duplicates = new HashSet&lt;&gt;();</span>
+        try {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            for (String genre : genres) {</span>
+<span class="nc" id="L65">                String genreQuery = URLSpaceCorrecter(genre);</span>
+<span class="nc" id="L66">                String cityQuery = URLSpaceCorrecter(city);</span>
+<span class="nc" id="L67">                Thread.sleep(250);</span>
+<span class="nc" id="L68">                String eventResponse = GenericAPICaller.makeCall(&quot;https://app.ticketmaster.com/discovery/v2/events?apikey=hR4AsCJAkMxliKGzf2GSaWGXnwlV8avn&amp;city=&quot; + cityQuery + &quot;&amp;classificationName=&quot; + genreQuery);</span>
+<span class="nc" id="L69">                JsonAdapter&lt;EventResponse&gt; adapter = new Moshi.Builder().build()</span>
+<span class="nc" id="L70">                    .adapter(EventResponse.class);</span>
+<span class="nc" id="L71">                int pageSize = Integer.parseInt(Objects.requireNonNull(adapter.fromJson(eventResponse)).page.totalPages);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                if (pageSize == 0) {</span>
+<span class="nc" id="L73">                    continue;</span>
+                }
+<span class="nc" id="L75">                EventResponse.MajorEvents totalEvents = Objects.requireNonNull(adapter.fromJson(eventResponse))._embedded;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                for (EventResponse.MajorEvents.Event event : totalEvents.events) {</span>
+<span class="nc" id="L77">                    HashMap&lt;String, Object&gt; inner = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L78">                    HashMap&lt;String, List&lt;String&gt;&gt; attractionMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                    if (!duplicates.contains(event.name)) {</span>
+<span class="nc" id="L80">                        duplicates.add(event.name);</span>
+<span class="nc" id="L81">                        inner.put(&quot;genre&quot;, genre);</span>
+<span class="nc" id="L82">                        inner.put(&quot;name&quot;, event.name);</span>
+<span class="nc" id="L83">                        inner.put(&quot;url&quot;, event.url);</span>
+<span class="nc" id="L84">                        inner.put(&quot;image&quot;, event.images.get(0).url);</span>
+<span class="nc" id="L85">                        inner.put(&quot;date&quot;, event.dates.start.localDate);</span>
+                    } else {
+                        continue;
+                    }
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                    if (event._embedded.attractions != null) {</span>
+<span class="nc" id="L90">                        List&lt;EventResponse.MajorEvents.Event.Inner.Attraction&gt; attractions = event._embedded.attractions;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                        for (EventResponse.MajorEvents.Event.Inner.Attraction attraction : attractions) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                            if (!attractionMap.containsKey(&quot;attraction&quot;)) {</span>
+<span class="nc" id="L93">                                attractionMap.put(&quot;attraction&quot;, new ArrayList&lt;&gt;());</span>
+                            } else {
+<span class="nc" id="L95">                                attractionMap.get(&quot;attraction&quot;).add(attraction.name);</span>
+                            }
+<span class="nc" id="L97">                        }</span>
+<span class="nc" id="L98">                        inner.putAll(attractionMap);</span>
+<span class="nc" id="L99">                        names.add(inner);</span>
+                    }
+<span class="nc" id="L101">                }</span>
+
+            }
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if (names.isEmpty()) {</span>
+<span class="nc" id="L105">                throw new NoTicketmasterListingsException(&quot;There are no ticketmaster listings in your area!&quot;);</span>
+            }
+
+        }
+<span class="nc" id="L109">        catch(IOException e){</span>
+<span class="nc" id="L110">            throw new EventReceiptException(&quot;Unable to parse event data!&quot;);</span>
+<span class="nc" id="L111">        }</span>
+<span class="nc" id="L112">        return names;</span>
+    }
+
+    private static String URLSpaceCorrecter(String word) {
+<span class="nc" id="L116">        String returnQuery = &quot;&quot;;</span>
+<span class="nc" id="L117">        String[] split = word.split(&quot; &quot;);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        for (int i = 0; i &lt; split.length; i ++) {</span>
+<span class="nc" id="L119">            returnQuery += split[i];</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if (i == split.length - 1) {</span>
+<span class="nc" id="L121">                break;</span>
+            }
+<span class="nc" id="L123">            returnQuery += &quot;%20&quot;;</span>
+        }
+<span class="nc" id="L125">        return returnQuery;</span>
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

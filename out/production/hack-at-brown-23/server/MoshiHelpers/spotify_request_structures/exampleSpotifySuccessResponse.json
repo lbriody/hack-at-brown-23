@@ -1,0 +1,109 @@
+{
+  "result": "success",
+  "response": {
+    "top_artists": {
+      "Tame Impala": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb90357ef28b3a012a1d1b2fa2",
+        "followers": "6030656",
+        "popularity": "79"
+      },
+      "Pond": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eba32a9906e45a772a81cde7cc",
+        "followers": "302321",
+        "popularity": "51"
+      },
+      "Pink Floyd": {
+        "img": "https://i.scdn.co/image/e69f71e2be4b67b82af90fb8e9d805715e0684fa",
+        "followers": "17898536",
+        "popularity": "78"
+      },
+      "Central Cee": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb26e664df4bbdc5569f823ffb",
+        "followers": "1964578",
+        "popularity": "80"
+      },
+      "Tory Lanez": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebbd5d3e1b363c3e26710661c3",
+        "followers": "4868857",
+        "popularity": "81"
+      },
+      "Juice WRLD": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb1908e1a8b79abf71d5598944",
+        "followers": "26656882",
+        "popularity": "89"
+      },
+      "The 1975": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb89348336354096fd4e36ca73",
+        "followers": "6045305",
+        "popularity": "80"
+      },
+      "J. Cole": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebadd503b411a712e277895c8a",
+        "followers": "18503918",
+        "popularity": "85"
+      },
+      "Kid Cudi": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb876faa285687786c3d314ae0",
+        "followers": "6173256",
+        "popularity": "81"
+      },
+      "Jack Harlow": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebed3a04c76cbc92b97f59c3c0",
+        "followers": "2714718",
+        "popularity": "81"
+      },
+      "Pop Smoke": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb597f9edd2cd1a892d4412b09",
+        "followers": "11567245",
+        "popularity": "83"
+      },
+      "levitation room": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebf8a78be48f64c9b58aa2af80",
+        "followers": "61092",
+        "popularity": "48"
+      },
+      "Polo G": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebdec41838906c58af1c29c9da",
+        "followers": "8702631",
+        "popularity": "83"
+      },
+      "Arctic Monkeys": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f",
+        "followers": "17191550",
+        "popularity": "87"
+      },
+      "Post Malone": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebb894ef9fa437b0389c5567cc",
+        "followers": "38952533",
+        "popularity": "88"
+      },
+      "Train": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb9ac5323dcebb1c7b80dcaf64",
+        "followers": "4170271",
+        "popularity": "72"
+      },
+      "Mac Miller": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebed3b89aa602145fde71a163a",
+        "followers": "8268714",
+        "popularity": "83"
+      },
+      "Childish Gambino": {
+        "img": "https://i.scdn.co/image/ab6761610000e5eb3ef779aa0d271adb2b6a3ded",
+        "followers": "10069211",
+        "popularity": "78"
+      },
+      "Georgia Webster": {
+        "img": "https://i.scdn.co/image/ab6761610000e5ebf73901fab2e560c253123c71",
+        "followers": "31662",
+        "popularity": "43"
+      }
+    },
+    "top_genres": [
+      "rap",
+      "pop",
+      "hip hop",
+      "rock",
+      "chicago rap"
+    ]
+  }
+}

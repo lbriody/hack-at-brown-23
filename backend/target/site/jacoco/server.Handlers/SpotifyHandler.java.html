@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpotifyHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">moshi</a> &gt; <a href="index.source.html" class="el_package">server.Handlers</a> &gt; <span class="el_source">SpotifyHandler.java</span></div><h1>SpotifyHandler.java</h1><pre class="source lang-java linenums">package server.Handlers;
+
+import static server.utility.GenericResponseSerializer.serializeResponse;
+
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+
+import server.exceptions.SpotifyHandlerExceptions.NoTopArtistsException;
+import server.exceptions.SpotifyHandlerExceptions.TopArtistsFailureException;
+import server.exceptions.SpotifyHandlerExceptions.TopGenreFailureException;
+import server.MoshiHelpers.spotify_request_structures.SingleTrackResponse;
+import server.MoshiHelpers.spotify_request_structures.TopArtistsResponse;
+import server.MoshiHelpers.spotify_request_structures.TopArtistsResponse.Item;
+import server.utility.HandlerInterface;
+import spark.QueryParamsMap;
+import spark.Request;
+import spark.Response;
+
+<span class="nc" id="L32">public class SpotifyHandler implements HandlerInterface {</span>
+    String[] myTopFiveGenres;
+
+    /**
+     * Called by the server when initializing the handler. This is the path that the handler will be
+     * invoked on.
+     *
+     * @return the path that this handler is set at.
+     */
+    @Override
+    public String getPath() {
+<span class="nc" id="L43">        return &quot;spotify&quot;;</span>
+    }
+
+
+    @Override
+    public Object handle(Request request, Response response) {
+        try {
+            // queryparams parsing
+<span class="nc" id="L51">            QueryParamsMap qm = request.queryMap();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (!qm.hasKey(&quot;access_token&quot;)) {</span>
+<span class="nc" id="L53">                return serializeResponse(&quot;error_bad_request&quot;, null);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            } else if (qm.get(&quot;access_token&quot;).value().equals(&quot;&quot;)) {</span>
+<span class="nc" id="L55">                return serializeResponse(&quot;error_invalid_token&quot;, null);</span>
+            }
+<span class="nc" id="L57">            String token = qm.get(&quot;access_token&quot;).value();</span>
+<span class="nc" id="L58">            Map&lt;String, Object&gt; successResponse = new HashMap&lt;&gt;();</span>
+            try { // error handling for an issue with getTopArtists
+<span class="nc" id="L60">                successResponse.put(&quot;top_artists&quot;, getTopArtists(token));</span>
+
+<span class="nc" id="L62">            } catch (TopArtistsFailureException e) {</span>
+<span class="nc" id="L63">                System.err.println(&quot;Artists failure!&quot;);</span>
+<span class="nc" id="L64">                myTopFiveGenres=null;</span>
+<span class="nc" id="L65">                return serializeResponse(&quot;artists_error&quot;, null);</span>
+<span class="nc" id="L66">            } catch (NoTopArtistsException e) {</span>
+<span class="nc" id="L67">                System.err.println(&quot;No top artists!&quot;);</span>
+<span class="nc" id="L68">                myTopFiveGenres=null;</span>
+<span class="nc" id="L69">                e.printStackTrace();</span>
+<span class="nc" id="L70">                return serializeResponse(&quot;no_top_artists_error&quot;, null);</span>
+<span class="nc" id="L71">            } catch (TopGenreFailureException e) {</span>
+<span class="nc" id="L72">                System.err.println(&quot;Top genres failure&quot;);</span>
+<span class="nc" id="L73">                myTopFiveGenres=null;</span>
+<span class="nc" id="L74">                return serializeResponse(&quot;genres_error&quot;, null);</span>
+<span class="nc" id="L75">            }</span>
+
+<span class="nc" id="L77">            successResponse.put(&quot;top_genres&quot;, myTopFiveGenres);</span>
+
+<span class="nc" id="L79">            return serializeResponse(&quot;success&quot;, successResponse);</span>
+<span class="nc" id="L80">        } catch (Exception e) {</span>
+<span class="nc" id="L81">            e.printStackTrace();</span>
+<span class="nc" id="L82">            return serializeResponse(&quot;error&quot;, null);</span>
+        }
+    }
+
+    /**
+     * This method uses the access token generated from the frontend login, gets links to the user's
+     * top 10 tracks, and calls getTopGenres to get all necessary information on each artist and
+     * populate the list of top genres.
+     *
+     * @param token the access_token from the user login
+     * @return a list Maps containing information about each artist
+     * @throws TopArtistsFailureException used to consolidate exceptions: if any exception in this
+     *                                    method is thrown, the issue is summarized as a
+     *                                    TopArtistsFailureException.
+     */
+    private ArrayList&lt;Map&lt;String, String&gt;&gt; getTopArtists(String token)
+        throws TopArtistsFailureException, NoTopArtistsException, TopGenreFailureException {
+        try {
+<span class="nc" id="L100">            HttpRequest topArtistsRequest = HttpRequest.newBuilder()</span>
+<span class="nc" id="L101">                .uri(new URI(&quot;https://api.spotify.com/v1/me/top/artists?time_range=short_term&quot;))</span>
+<span class="nc" id="L102">                .GET()</span>
+<span class="nc" id="L103">                .header(&quot;Authorization&quot;, &quot;Bearer &quot; + token)</span>
+<span class="nc" id="L104">                .build();</span>
+<span class="nc" id="L105">            HttpResponse&lt;String&gt; topArtistsResponse = HttpClient.newBuilder()</span>
+<span class="nc" id="L106">                .build()</span>
+<span class="nc" id="L107">                .send(topArtistsRequest, BodyHandlers.ofString());</span>
+<span class="nc" id="L108">            JsonAdapter&lt;TopArtistsResponse&gt; adapter = new Moshi.Builder().build()</span>
+<span class="nc" id="L109">                .adapter(TopArtistsResponse.class);</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            if (Objects.requireNonNull(adapter.fromJson(topArtistsResponse.body())).items == null) {</span>
+<span class="nc" id="L111">                throw new NoTopArtistsException(&quot;ERROR: No top artists found!&quot;);</span>
+            }
+<span class="nc" id="L113">            ArrayList&lt;Map&lt;String, String&gt;&gt; topArtistList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L114">            ArrayList&lt;String&gt; topArtistLinks = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            for (Item artist : Objects.requireNonNull(</span>
+<span class="nc" id="L116">                adapter.fromJson(topArtistsResponse.body())).items) {</span>
+<span class="nc" id="L117">                topArtistLinks.add(artist.href);</span>
+<span class="nc" id="L118">                Map&lt;String, String&gt; artistMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L119">                artistMap.put(&quot;name&quot;, artist.name);</span>
+<span class="nc" id="L120">                artistMap.put(&quot;img&quot;, artist.images.get(0).url);</span>
+<span class="nc" id="L121">                artistMap.put(&quot;popularity&quot;, String.valueOf(artist.popularity));</span>
+<span class="nc" id="L122">                artistMap.put(&quot;followers&quot;, String.valueOf(artist.followers.total));</span>
+<span class="nc" id="L123">                topArtistList.add(artistMap);</span>
+<span class="nc" id="L124">            }</span>
+<span class="nc" id="L125">            getTopGenres(topArtistLinks, token);</span>
+<span class="nc" id="L126">            return topArtistList;</span>
+
+<span class="nc" id="L128">        } catch (IOException | InterruptedException | URISyntaxException | NullPointerException e) {</span>
+<span class="nc" id="L129">            e.printStackTrace();</span>
+<span class="nc" id="L130">            throw new TopArtistsFailureException(</span>
+                &quot;ERROR: Unable to retrieve the top artists. Check that &quot;
+                    + &quot;your token is valid and includes the user-top-read scope.&quot;);
+        }
+    }
+
+
+    /**
+     * This method sets the shared state of TopFiveGenres to the 5 most popular genres from each of
+     * the users top 20 artists.
+     *
+     * @param artistList the list of links for the top 20 artists
+     * @param token      the access_token from the frontend
+     * @throws TopGenreFailureException used to consolidate exceptions: if any exception in this
+     *                                  method is thrown, the issue is summarized as a
+     *                                  TopGenreFailureException.
+     */
+    private void getTopGenres(List&lt;String&gt; artistList, String token)
+        throws TopGenreFailureException {
+<span class="nc" id="L149">        Map&lt;String, Integer&gt; genreMap = new HashMap&lt;&gt;();</span>
+        try {
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            for (String link : artistList) {</span>
+<span class="nc" id="L152">                HttpRequest trackRequest = HttpRequest.newBuilder()</span>
+<span class="nc" id="L153">                    .uri(new URI(link))</span>
+<span class="nc" id="L154">                    .GET()</span>
+<span class="nc" id="L155">                    .header(&quot;Authorization&quot;, &quot;Bearer &quot; + token)</span>
+<span class="nc" id="L156">                    .build();</span>
+<span class="nc" id="L157">                HttpResponse&lt;String&gt; trackResponse = HttpClient.newBuilder()</span>
+<span class="nc" id="L158">                    .build()</span>
+<span class="nc" id="L159">                    .send(trackRequest, BodyHandlers.ofString());</span>
+<span class="nc" id="L160">                JsonAdapter&lt;SingleTrackResponse&gt; adapter = new Moshi.Builder().build()</span>
+<span class="nc" id="L161">                    .adapter(SingleTrackResponse.class);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                for (String genre : Objects.requireNonNull(</span>
+<span class="nc" id="L163">                    adapter.fromJson(trackResponse.body())).genres) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                    if (genreMap.containsKey(genre)) {</span>
+<span class="nc" id="L165">                        genreMap.put(genre, genreMap.get(genre) + 1);</span>
+                    } else {
+<span class="nc" id="L167">                        genreMap.put(genre, 1);</span>
+                    }
+<span class="nc" id="L169">                }</span>
+<span class="nc" id="L170">            }</span>
+<span class="nc" id="L171">            ArrayList&lt;Entry&lt;String, Integer&gt;&gt; topFiveGenres = new ArrayList&lt;&gt;(genreMap.entrySet());</span>
+<span class="nc" id="L172">            topFiveGenres.sort((o1, o2) -&gt; o2.getValue().compareTo(o1.getValue()));</span>
+<span class="nc" id="L173">            String[] topGenres = new String[5];</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            for (int i = 0; i &lt; 5; i++) {</span>
+<span class="nc" id="L175">                topGenres[i] = topFiveGenres.get(i).getKey();</span>
+            }
+<span class="nc" id="L177">            myTopFiveGenres=topGenres;</span>
+<span class="nc" id="L178">        } catch (IOException | InterruptedException | URISyntaxException | NullPointerException e) {</span>
+<span class="nc" id="L179">            throw new TopGenreFailureException(&quot;ERROR: Unable to retrieve the top genres.&quot;);</span>
+<span class="nc" id="L180">        }</span>
+<span class="nc" id="L181">    }</span>
+
+}
+
+
+
+
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
