@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import './App.css';
+import './style/App.css';
 import LoginPage from './landing-page/LoginPage';
 import {BrowserRouter as Router, Routes, Route, BrowserRouter} from 'react-router-dom'
 import PostPage from './post-page/PostPage';
