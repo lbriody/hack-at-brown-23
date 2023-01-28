@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GenericAPICaller.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">moshi</a> &gt; <a href="index.source.html" class="el_package">server.utility</a> &gt; <span class="el_source">GenericAPICaller.java</span></div><h1>GenericAPICaller.java</h1><pre class="source lang-java linenums">package server.utility;
+
+import server.exceptions.EventReceiptException;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+public class GenericAPICaller {
+
+
+    private GenericAPICaller() {}
+
+
+
+    public static String makeCall(String url) throws Exception {
+        try {
+<span class="nc" id="L22">            HttpRequest locationRequest = HttpRequest.newBuilder()</span>
+<span class="nc" id="L23">                    .uri(new URI(url))</span>
+<span class="nc" id="L24">                    .GET()</span>
+<span class="nc" id="L25">                    .build();</span>
+
+<span class="nc" id="L27">            HttpResponse&lt;String&gt; locationResponse = HttpClient.newBuilder()</span>
+<span class="nc" id="L28">                    .build()</span>
+<span class="nc" id="L29">                    .send(locationRequest, HttpResponse.BodyHandlers.ofString());</span>
+
+<span class="nc" id="L31">            return locationResponse.body();</span>
+        }
+
+<span class="nc" id="L34">        catch (InterruptedException | IOException | URISyntaxException e){</span>
+<span class="nc" id="L35">            throw new Exception(&quot;An error has occured while making this API call&quot;);</span>
+
+        }
+
+    }
+
+
+
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

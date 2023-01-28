@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">moshi</a> &gt; <a href="index.source.html" class="el_package">server.database</a> &gt; <span class="el_source">DatabaseReader.java</span></div><h1>DatabaseReader.java</h1><pre class="source lang-java linenums">package server.database;
+
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.sun.security.jgss.GSSUtil;
+import server.MoshiHelpers.database_request_structures.EventSearch;
+import server.MoshiHelpers.ticketmaster_request_structures.EventResponse;
+import server.exceptions.LocalListingException;
+import server.exceptions.NoCompatibleGenresException;
+import server.exceptions.NoLocalListingsException;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.sql.Array;
+import java.util.*;
+
+import static server.utility.GenericAPICaller.makeCall;
+
+<span class="nc" id="L23">public class DatabaseReader {</span>
+    public List&lt;HashMap&lt;String, Object&gt;&gt; getGenres(String city) throws LocalListingException, NoLocalListingsException, NoCompatibleGenresException {
+<span class="nc" id="L25">        List&lt;HashMap&lt;String, Object&gt;&gt; returnList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L26">        List&lt;String&gt; spotifyGenres = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L27">        boolean cityFlag = false;</span>
+<span class="nc" id="L28">        boolean empty = true;</span>
+        //TODO: use the shared state genres, and loop using those instead of hardcoding genres.
+<span class="nc" id="L30">        spotifyGenres.add(&quot;pop&quot;);</span>
+<span class="nc" id="L31">        spotifyGenres.add(&quot;rock&quot;);</span>
+<span class="nc" id="L32">        spotifyGenres.add(&quot;rap&quot;);</span>
+<span class="nc" id="L33">        String URL = &quot;https://cs32-final-project-cblhckem-default-rtdb.firebaseio.com/events/.json&quot;;</span>
+        try {
+<span class="nc" id="L35">            String responseBody = makeCall(URL);</span>
+<span class="nc" id="L36">            JsonAdapter&lt;EventSearch&gt; adapter = new Moshi.Builder().build()</span>
+<span class="nc" id="L37">                    .adapter(EventSearch.class);</span>
+<span class="nc" id="L38">            List&lt;EventSearch.Event&gt; events = Objects.requireNonNull(adapter.fromJson(responseBody)).events;</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">            for (EventSearch.Event event : events) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">                if (!(event.city.equalsIgnoreCase(city.toLowerCase()))) {</span>
+<span class="nc" id="L41">                    continue;</span>
+                }
+<span class="nc" id="L43">                cityFlag = true;</span>
+<span class="nc" id="L44">                HashMap&lt;String, Object&gt; inner = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L45">                HashMap&lt;String, List&lt;String&gt;&gt; genreMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L46">                List&lt;EventSearch.Event.Genre&gt; genres = event.genres;</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">                for (EventSearch.Event.Genre genre : genres) {</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">                    if (spotifyGenres.contains(genre.name.toLowerCase())) {</span>
+<span class="nc" id="L49">                        empty = false;</span>
+<span class="nc" id="L50">                        inner.put(&quot;name&quot;, event.eventname);</span>
+<span class="nc" id="L51">                        inner.put(&quot;performer&quot;, event.performer);</span>
+<span class="nc" id="L52">                        inner.put(&quot;venue&quot;, event.venue);</span>
+<span class="nc" id="L53">                        inner.put(&quot;datetime&quot;, event.epoch);</span>
+<span class="nc" id="L54">                        inner.put(&quot;description&quot;, event.description);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                        if (!genreMap.containsKey(&quot;genres&quot;)) {</span>
+<span class="nc" id="L56">                            genreMap.put(&quot;genres&quot;, new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L57">                            genreMap.get(&quot;genres&quot;).add(genre.name);</span>
+                        } else {
+<span class="nc" id="L59">                            genreMap.get(&quot;genres&quot;).add(genre.name);</span>
+                        }
+
+                    }
+<span class="nc" id="L63">                }</span>
+<span class="nc" id="L64">                inner.putAll(genreMap);</span>
+<span class="nc" id="L65">                returnList.add(inner);</span>
+
+<span class="nc" id="L67">            }</span>
+<span class="nc" id="L68">            System.out.println(returnList);</span>
+
+
+<span class="nc" id="L71">        } catch (IOException | URISyntaxException | InterruptedException e) {</span>
+<span class="nc" id="L72">            throw new LocalListingException(&quot;Unable to parse this event!&quot;);</span>
+
+        }
+<span class="nc" id="L75">        catch (Exception e) {</span>
+<span class="nc" id="L76">            e.printStackTrace();</span>
+<span class="nc" id="L77">        }</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (empty) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (cityFlag) {</span>
+<span class="nc" id="L80">                throw new NoCompatibleGenresException(&quot;No local listings in your area for your music taste!&quot;);</span>
+            }
+<span class="nc" id="L82">            throw new NoLocalListingsException(&quot;No local listings in your area!&quot;);</span>
+        }
+<span class="nc" id="L84">        return returnList;</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
