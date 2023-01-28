@@ -1,2 +1,4 @@
 .idea/
 out
+private
+node_modules
