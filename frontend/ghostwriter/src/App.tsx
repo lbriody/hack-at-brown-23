@@ -8,6 +8,7 @@ import { ChakraProvider, CSSReset, Box} from '@chakra-ui/react'
 import { ThemeProvider, extendTheme} from '@chakra-ui/react'
 import '@fontsource/inter';
 import theme from "./Theme";
+import StoryPage from './story-page/StoryPage';
 
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
     <Router>
        <Routes>
         <Route path='/' element={<LoginPage/>}></Route>
-         <Route path='/post' element={<PostPage/>}></Route>
+         {/* <Route path='/post' element={<PostPage/>}></Route> */}
+         <Route path='/story' element={<StoryPage/>}></Route>
         </Routes>
       </Router>
       

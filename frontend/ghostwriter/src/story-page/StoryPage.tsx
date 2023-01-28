@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react"
 import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
-import source from "./lost-places-pforphoto-leave-factory-158229.webp";
 import PostPage from '../post-page/PostPage'
+import {dalle, text} from "../OpenaiHandlers"
 
 
 function StoryPage() {
-    const CLIENT_ID = "0dfecd40e87344e0adf73728e2317442"
-    const REDIRECT_URI = "http://localhost:3000/top-genres/"
-    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-    const RESPONSE_TYPE = "token"
+  
+
+
+    const source = await dalle("a fish flying over a rainbow")
+    
 
     return (
       <Stack>
@@ -31,8 +32,6 @@ function StoryPage() {
               
                   
                 <Heading fontSize="48" pos="absolute" top="20">TYPING TEXT HERE</Heading>
-                <PostPage></PostPage>
-                  
                 </Flex>
 
               </Box>
