@@ -10,7 +10,6 @@ import '@fontsource/inter';
 import theme from "./Theme";
 import StoryPage from './pages/story-page/StoryPage';
 
-
 function App() {
 
   return (
