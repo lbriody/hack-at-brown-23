@@ -5,10 +5,6 @@ import PostPage from '../post-page/PostPage'
 
 
 function StoryPage() {
-    const CLIENT_ID = "0dfecd40e87344e0adf73728e2317442"
-    const REDIRECT_URI = "http://localhost:3000/top-genres/"
-    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-    const RESPONSE_TYPE = "token"
 
     return (
       <Stack>
