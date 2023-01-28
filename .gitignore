@@ -1,7 +1,7 @@
 #private
 .idea
 out
-frontend/ghostwriter/private
+frontend/ghostwriter/src/private
 
 # dependencies
 frontend/ghostwriter/node_modules

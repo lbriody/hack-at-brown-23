@@ -18,6 +18,7 @@ import { getDatabase, ref, set } from "firebase/database";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { Dispatch, useState, SetStateAction } from 'react';
+    const REDIRECT_URI = "http://localhost:3000/story/"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -97,15 +98,13 @@ function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
 
 export default function SimpleCard() {
   const [nameInput, setNameInput] = useState<string>("")
-  const [imageInput, setImageInput] = useState<string>("")
-  const [linkInput, setLinkInput] = useState<string>("")
-  const [descriptionInput, setDescriptionInput] = useState<string>("")
-  const [featuringInput, setFeaturingInput] = useState<string>("")
-  const [dateInput, setDateInput] = useState<string>("")
   const [cityInput, setCityInput] = useState<string>("")
-  const [venueInput, setVenueInput] = useState<string>("")
-  const [genre1Input, setGenre1Input] = useState<string>("")
-  const [genre2Input, setGenre2Input] = useState<string>("")
+
+  const CLIENT_ID = "0dfecd40e87344e0adf73728e2317442"
+  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+  const RESPONSE_TYPE = "token"
+
+  const REDIRECT_URI = "http://localhost:3000/story/"
 
   return (
     <Box>
@@ -140,22 +139,9 @@ export default function SimpleCard() {
                 justify={'space-between'}>
                 <Checkbox>I am not a murderer</Checkbox>
               </Stack>
-              <Button
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500',
-                }}
-                onClick={() => {
-                  const id = Math.round(Math.random()*999999) //noncontinuous
-                  writeNewEvent(5, nameInput, linkInput, imageInput, descriptionInput, featuringInput, 1671974193, cityInput,venueInput, "rap", "soul")
-                  //TODO: fix the key generation. It needs to be continuous (i.e. 1,2,3,4,5) for some reason
-                  //I almost want to see if we can fix this in the backend because it doesnt make sense why noncontinuous shouldn't work --what if someone deletes a listing?
-                      }
-                  }
-                >
-                Submit
-              </Button>
+              <Link href="/story">
+                        <Button bg='#4F11FF' color='#FFFFFF' top = "-12"> Submit! </Button>
+                    </Link>
             </Stack>
           </Stack>
         </Box>

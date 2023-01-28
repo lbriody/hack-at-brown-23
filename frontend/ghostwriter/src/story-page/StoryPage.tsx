@@ -1,10 +1,27 @@
 import { useEffect, useState } from "react"
 import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
-import source from "./lost-places-pforphoto-leave-factory-158229.webp";
 import PostPage from '../post-page/PostPage'
+import {dalle, text} from "../OpenaiHandlers"
 
 
 function StoryPage() {
+  
+    const [source, setSource] = useState<string>("");    
+
+
+    useEffect(() => {
+      dalle("A fish flying over the rainbow").then(
+        response => {
+          if (response == undefined) {
+            console.log("ERROR");
+          } else {
+            console.log("USEFFECT CALLED");
+            setSource(response);
+          }
+        }
+      )
+
+    });
 
     return (
       <Stack>
@@ -27,8 +44,6 @@ function StoryPage() {
               
                   
                 <Heading fontSize="48" pos="absolute" top="20">TYPING TEXT HERE</Heading>
-                <PostPage></PostPage>
-                  
                 </Flex>
 
               </Box>
