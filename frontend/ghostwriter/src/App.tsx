@@ -10,8 +10,6 @@ import '@fontsource/inter';
 import theme from "./Theme";
 import StoryPage from './pages/story-page/StoryPage';
 
-import StoryPage from './story-page/StoryPage';
-
 function App() {
 
   return (
@@ -24,15 +22,9 @@ function App() {
 
     <Router>
        <Routes>
-<<<<<<< HEAD
         <Route path='/' element={<LoginPage/>}></Route>
          {/* <Route path='/post' element={<PostPage/>}></Route> */}
          <Route path='/story' element={<StoryPage/>}></Route>
-=======
-        {/* <Route path='/' element={<LoginPage/>}></Route> */}
-        <Route path='/' element={<StoryPage/>}></Route>
-        <Route path='/post' element={<PostPage/>}></Route>
->>>>>>> story-page
         </Routes>
       </Router>
       
