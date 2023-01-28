@@ -19,9 +19,6 @@ async function dalle(prompt: string) {
     return generateImage.data.data[0].url;
 }
 
-export { dalle }
-
-
 function text(prompt: string) {
 
   const configuration = new Configuration({
@@ -53,4 +50,4 @@ function generatePrompt(prompt: string) {
   Names:`;
 }
 
-export { text }
+export { dalle, text }
