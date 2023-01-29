@@ -3,33 +3,41 @@ import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-import {dalle, gpt, StoryType } from "../../OpenaiHandlers"
+import {dalle, GptCall,StoryType, callType} from "../../OpenaiHandlers"
 
 
 function StoryPage() {
-    const response = `
+  const names = new Array<string>;
+  names.push("colden");
+  names.push("maya");
+  names.push("luke");
+  const location = "milwaukee";
+  const storyType = ""
+  const caller = new GptCall(names, location, StoryType.FUNNY);
+  const response = caller.call(callType.START)
+    // const response = `
 
-    John and Jane had been childhood friends, but ever since they had grown up, their paths had hardly crossed. So when Jane called John out of the blue to ask him to join her and her friend Jill for a camping trip in the woods, John eagerly accepted.
+    // John and Jane had been childhood friends, but ever since they had grown up, their paths had hardly crossed. So when Jane called John out of the blue to ask him to join her and her friend Jill for a camping trip in the woods, John eagerly accepted.
     
-    The three of them set off in the early morning, and despite the chilly air, they were in high spirits. It wasn’t long before they arrived at their destination. They set up camp, and before long, they were all gathered around the campfire, telling stories and roasting marshmallows.
+    // The three of them set off in the early morning, and despite the chilly air, they were in high spirits. It wasn’t long before they arrived at their destination. They set up camp, and before long, they were all gathered around the campfire, telling stories and roasting marshmallows.
     
-    As the night wore on, Jane and John started to feel a bit uneasy. They both had a strange feeling that someone or something was watching them. Even Jill, who normally was not one to be spooked, seemed to be on edge.
+    // As the night wore on, Jane and John started to feel a bit uneasy. They both had a strange feeling that someone or something was watching them. Even Jill, who normally was not one to be spooked, seemed to be on edge.
     
-    The three of them were starting to get ready to turn in for the night when they heard a loud, shrill scream coming from the woods. It sounded like it was coming from a woman. Jane and John looked at each other with wide eyes, and Jill, who had gone pale, spoke in a shaky voice.
+    // The three of them were starting to get ready to turn in for the night when they heard a loud, shrill scream coming from the woods. It sounded like it was coming from a woman. Jane and John looked at each other with wide eyes, and Jill, who had gone pale, spoke in a shaky voice.
     
-    “We should get out of here. Now.”
+    // “We should get out of here. Now.”
     
-    The three of them quickly packed up their things and started to make their way back towards the car. As they made their way through the darkness, they heard the same scream again, this time much closer. They started to run, but before they could make it to the car, they heard the sound of heavy footsteps behind them.
+    // The three of them quickly packed up their things and started to make their way back towards the car. As they made their way through the darkness, they heard the same scream again, this time much closer. They started to run, but before they could make it to the car, they heard the sound of heavy footsteps behind them.
     
-    John and Jane both turned around, and were horrified to see a ghostly figure standing in the shadows. It was a woman, dressed in a long white dress and wearing a veil over her face. She was transparent, and her eyes were glowing in the darkness.
+    // John and Jane both turned around, and were horrified to see a ghostly figure standing in the shadows. It was a woman, dressed in a long white dress and wearing a veil over her face. She was transparent, and her eyes were glowing in the darkness.
     
-    The three of them stopped in their tracks, frozen in fear. Then, the woman spoke in a low, haunting voice.
+    // The three of them stopped in their tracks, frozen in fear. Then, the woman spoke in a low, haunting voice.
     
-    “You should not have come here. Leave now, or else you will become one of us.”
+    // “You should not have come here. Leave now, or else you will become one of us.”
     
-    Without another word, the three of them turned and ran as fast as they could, not stopping until they made it back to the safety of their car.
+    // Without another word, the three of them turned and ran as fast as they could, not stopping until they made it back to the safety of their car.
     
-    John and Jane never spoke of the incident again, but ever since that night, they have both had a feeling that the woman in white was still out there in the woods, watching them from the shadows.`
+    // John and Jane never spoke of the incident again, but ever since that night, they have both had a feeling that the woman in white was still out there in the woods, watching them from the shadows.`
     
     const [source, setSource] = useState<string>(""); 
     const [parNum, setParNum] = useState<number>(0);
@@ -74,7 +82,8 @@ function StoryPage() {
             <Typewriter
               onInit={(typewriter) => {
                 setIsTyping(true);
-                response.split('\n')
+                response.then( (res) =>{
+                res.split('\n')
                         .map((par) => par.trim())
                         .filter((par) => {
                           if (!(par === "")) {
@@ -92,7 +101,7 @@ function StoryPage() {
                           .pauseFor(1000)
                           .deleteAll()
                           .start();
-                        })
+                        })})
                 setIsTyping(false);
                 }
               }
@@ -102,6 +111,7 @@ function StoryPage() {
                 cursor: "|"
               }}               
             />
+
             { isTyping 
                     ? <ChoiceComponant></ChoiceComponant>
                     : null

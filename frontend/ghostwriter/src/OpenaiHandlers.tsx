@@ -31,6 +31,8 @@ class GptCall {
         this.storyType = storyType;
     }
 
+    
+
     async call(call: callType) {
         let prompt = "";
         if (call === callType.START) {
@@ -91,6 +93,9 @@ async function gpt(prompt: string) {
         temperature: 0.6,
         max_tokens: 2048,
       });
+      if (result.data.choices[0].text === undefined) {
+        return "";
+      }
     return result.data.choices[0].text;
     };
 
@@ -134,4 +139,4 @@ async function gpt(prompt: string) {
 //   Names:`;
 // }
 
-export { dalle, gpt, StoryType, GptCall }
+export { dalle, StoryType, GptCall, callType}
