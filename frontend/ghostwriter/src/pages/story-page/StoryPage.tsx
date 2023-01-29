@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react"
-import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/react';
+import { useState } from "react"
+import { Stack, Heading, Box, Flex} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
-import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-import {dalle, GptCall, callType, gpt, StoryType} from "../../OpenaiHandlers"
+import {dalle, GptCall, callType} from "../../OpenaiHandlers"
 import { userDataMap } from "../post-page/PostPage";
-import { eventWrapper } from "@testing-library/user-event/dist/utils";
-import { callExpression } from "@babel/types";
 
 async function startStory() {
   const caller = new GptCall(userDataMap.get("names"), userDataMap.get("location"), userDataMap.get("storyType"));
@@ -14,7 +11,9 @@ async function startStory() {
 }
 
 function StoryPage() {
-  const [response, setResponse] = useState<string>("startStory().then (response => { return response; })");
+  const [optNum, setOptNum] = useState<number>(0);
+  const [responsePromise, setResponsePromise] = useState<Promise<string>>(startStory());
+  const [response, setResponse] = useState<string>("");
   const [source, setSource] = useState<string>(""); 
   const [isTyping, setIsTyping] = useState<boolean>(true);
 
@@ -36,8 +35,16 @@ function StoryPage() {
     });
   }
 
-  const generateWrapper = () =>  {
-    return ( '<span className="Typewriter__wrapper"></span>' );
+  const getResponse = () => {
+    if (responsePromise === undefined) {
+      console.log("ERROR");
+    } else {
+      responsePromise.then((res) =>{
+        setResponse(res)
+        console.log("WORKING");
+        console.log(response);
+      })
+    }
   }
 
   return (
@@ -60,10 +67,11 @@ function StoryPage() {
           <Heading fontSize="48" pos="absolute" top="20">GHOSTWRITER</Heading>
           
           <Typewriter
-            key={response}
+            key={optNum}
             onInit={(typewriter) => {
               setIsTyping(true);
               // Parses reponse into paragraphs
+              getResponse()
               response.split('\n')
                       .map((par) => par.trim())
                       .filter((par) => {
