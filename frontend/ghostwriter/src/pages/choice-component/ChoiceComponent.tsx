@@ -1,7 +1,7 @@
 import { Button, Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import React from 'react';
 
-export default function ChoiceComponant() {
+export default function ChoiceComponant({handleData}) {
   const [value, setValue] = React.useState('A')
   return (
     <RadioGroup onChange={setValue} value={value}>
@@ -10,7 +10,12 @@ export default function ChoiceComponant() {
         <Radio value='B'>Choose B</Radio>
         <Radio value='C'>Choose C</Radio>
       </Stack>
-    <Button >Submit</Button>
+    <Button 
+      type="submit"
+      onClick={() => {handleData(value)}}
+    >
+      Submit
+    </Button>
     </RadioGroup>
   )
 }

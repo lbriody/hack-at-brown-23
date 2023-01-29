@@ -5,10 +5,11 @@ import ChoiceComponant from "../choice-component/ChoiceComponent";
 import source from './black-50.jpeg';
 import {dalle, GptCall, callType } from "../../OpenaiHandlers";
 import zIndex from "@mui/material/styles/zIndex";
-import { userDataMap } from "../post-page/PostPage";
+import { userDataMap } from "../post-page/PostPage";\
 
 async function startStory() {
-  const caller = new GptCall(userDataMap.get("names"), userDataMap.get("location"), userDataMap.get("storyType"));
+  const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
+  const caller = new GptCall(data.get("names"), data.get("location"), data.get("storyType"));
   return await caller.call(callType.START)
 }
 
@@ -47,6 +48,13 @@ function StoryPage() {
         console.log(response);
       })
     }
+  }
+
+  const branch = (opt: number) => {
+    const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
+    const caller = new GptCall(data.get("names"), data.get("location"), data.get("storyType"));
+    setResponsePromise(caller.call(callType.BRANCH, opt));
+    setOptNum(opt);
   }
 
   return (
@@ -108,7 +116,7 @@ function StoryPage() {
           /></Box>
           { isTyping 
                   ? null
-                  : <ChoiceComponant></ChoiceComponant>
+                  : <ChoiceComponant func={branch}></ChoiceComponant>
               }
           
           </Flex>
