@@ -38,8 +38,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 
-
-
 function writeEnum(nameInput1: string, nameInput2: string, nameInput3: string, 
   nameInput4: string, nameInput5: string, cityInput: string, selectedStory: string) {
     // TODO: write this function
@@ -59,6 +57,7 @@ function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
               type="text"
               bgColor="black"
               aria-label={ariaLabel}
+              borderRadius='12'
       ></Input>
       )
   }
@@ -104,6 +103,8 @@ export default function SimpleCard() {
 
             </FormControl>
             <Select
+              borderRadius='12'
+              bgColor={'black'}
                 value={selectedStory}
                 onChange={event => setSelectedStory(event.target.value)}>
                 <option value='option1'>Funny</option>
@@ -123,9 +124,9 @@ export default function SimpleCard() {
                 <Checkbox fontSize="18">I am not a murderer or a bot</Checkbox>
               </Stack>
               <Link href="/story"><Button
-              fontSize="17"
+              fontSize="16"
               width={220}
-              height={50}
+              height={35}
                 bg={'white'}
                 borderRadius={'2xl'}
                 color={'black'}
