@@ -144,4 +144,4 @@ async function gpt(prompt: string) {
 //   Names:`;
 // }
 
-export { dalle, GptCall, callType}
+export { dalle, GptCall, gpt, callType}

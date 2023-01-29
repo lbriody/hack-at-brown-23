@@ -3,7 +3,7 @@ import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-import {dalle, GptCall, callType, gpt, StoryType} from "../../OpenaiHandlers"
+import {dalle, GptCall, callType} from "../../OpenaiHandlers"
 import { userDataMap } from "../post-page/PostPage";
 import { eventWrapper } from "@testing-library/user-event/dist/utils";
 import { callExpression } from "@babel/types";
