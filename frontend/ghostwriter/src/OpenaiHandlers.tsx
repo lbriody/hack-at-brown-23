@@ -1,5 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
-import privateKey from "./private/key"
+import privateKey from "./private/key";
+// import { Dalle } from "dalle-node";
+
 
 enum StoryType {
     SPOOKY = "spooky",
@@ -31,7 +33,7 @@ class GptCall {
 
     async call(call: callType) {
         let prompt = "";
-        if (call == callType.START) {
+        if (call === callType.START) {
                 prompt = "You are providing segments of a choose your own adventure story to a user,\
                  who will make a choice after each page or so of text. You will then be asked to continue\
                   the story for another page and offer another choice. Do not mention this. When you offer\
@@ -39,12 +41,12 @@ class GptCall {
                    story involving the following people: " + this.names.map(person => person).join(", ") + "\
                    . The story should take place in " + this.location + ". The story should be " + this.storyType + ".";
         }
-        else if (call = callType.A_CONT) prompt = "A, then offer another prompt.";
-        else if (call = callType.B_CONT) prompt = "B, then offer another prompt.";
-        else if (call = callType.C_CONT) prompt = "C, then offer another prompt";
-        else if (call = callType.A) prompt = "A";
-        else if (call = callType.B) prompt = "B";
-        else if (call = callType.C) prompt = "C";
+        else if (call === callType.A_CONT) prompt = "A, then offer another prompt.";
+        else if (call === callType.B_CONT) prompt = "B, then offer another prompt.";
+        else if (call === callType.C_CONT) prompt = "C, then offer another prompt";
+        else if (call === callType.A) prompt = "A";
+        else if (call === callType.B) prompt = "B";
+        else if (call === callType.C) prompt = "C";
 
         return await gpt(prompt)
 
@@ -60,20 +62,21 @@ class GptCall {
 //     }
 // }
 
-async function dalle(prompt: string) {
+async function dalle(p: string) {
+
     console.log("DALLE CALLED")
     const configuration = new Configuration({
-        apiKey: privateKey,
+        apiKey: privateKey
       });    
     const openai = new OpenAIApi(configuration);
     const generateImage = await openai.createImage({
-          prompt: prompt,
+          prompt: p,
           n: 1,
-          size: "256x256",
+          size: "256x256"
         });
-    
     return generateImage.data.data[0].url;
 }
+
 
 async function gpt(prompt: string) {
     console.log(prompt);
@@ -131,4 +134,4 @@ async function gpt(prompt: string) {
 //   Names:`;
 // }
 
-export { dalle, gpt as text, StoryType, GptCall }
+export { dalle, gpt, StoryType, GptCall }
