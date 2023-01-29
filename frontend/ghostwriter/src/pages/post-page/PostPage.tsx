@@ -41,39 +41,10 @@ const app = initializeApp(firebaseConfig);
 
 
 function writeEnum(nameInput1: string, nameInput2: string, nameInput3: string, 
-  nameInput4: string, nameInput5: string, cityInput: string, ) {
+  nameInput4: string, nameInput5: string, cityInput: string, selectedStory: string) {
     // TODO: write this function
 }
 
-
-function writeNewEvent(eventId: Number, eventName: string, eventLink: string, 
-  eventImage: string, eventDescription: string, eventFeaturing: string,
-  eventEpoch: Number, eventCity: string,
-  eventVenue: string, eventGenre1: string, eventGenre2: string) {
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-  set(ref(db, 'events/events/' + eventId), {
-      eventname: eventName,
-      city: eventCity,
-      description: eventDescription,
-      epoch: eventEpoch,
-      eventId: eventId,
-      image: eventImage,
-      performer: eventFeaturing,
-      venue: eventVenue,
-      link: eventLink,
-    
-});
-  set(ref(db, 'events/events/' + eventId +'/genres/0/'), {
-    name: eventGenre1, //TODO: Fix this to handle multiple genres
-  });
-
-  set(ref(db, 'events/events/' + eventId +'/genres/1/'), {
-    name: eventGenre2, 
-  });
-
-
-}
 
 interface ControlledInputProps {
   value: string, 
@@ -92,17 +63,6 @@ function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
       )
   }
 
-// const storyOptions = [{value:'option1', label:"Funny"}, {value:'option2', label:"Scary"}, 
-// {value:'option4', label:"Eldrich"}, {value:'option3', label:"Scary"},  {value:'option5', label:"Morbid"}, 
-// {value:'option6', label:"Youtuber apology video"}, {value:'option7', label:"Saw"}, {value:'option8', label:"Emo"}];
-
-
-// interface StoryOption extends OptionBase {
-//   label: string;
-//   value: string; 
-// }
-
-
 
 export default function SimpleCard() {
   const [nameInput1, setNameInput1] = useState<string>("")
@@ -110,22 +70,8 @@ export default function SimpleCard() {
   const [nameInput3, setNameInput3] = useState<string>("")
   const [nameInput4, setNameInput4] = useState<string>("")
   const [nameInput5, setNameInput5] = useState<string>("")
-  const [imageInput, setImageInput] = useState<string>("")
-  const [linkInput, setLinkInput] = useState<string>("")
-  const [descriptionInput, setDescriptionInput] = useState<string>("")
-  const [featuringInput, setFeaturingInput] = useState<string>("")
-  const [dateInput, setDateInput] = useState<string>("")
   const [cityInput, setCityInput] = useState<string>("")
-  const [venueInput, setVenueInput] = useState<string>("")
-  const [genre1Input, setGenre1Input] = useState<string>("")
-  const [genre2Input, setGenre2Input] = useState<string>("")
   const [selectedStory, setSelectedStory] = useState("")
-
-  // const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-  //   if(event && event.target) {
-  //     setSelectedStory(event.target.value);
-  //   }
-  // }
 
   return (
     <Box>
@@ -155,6 +101,7 @@ export default function SimpleCard() {
             </FormControl>
             <FormControl id="Vibe">
               <FormLabel fontSize="18" fontWeight="bold">Vibe</FormLabel>
+
             </FormControl>
             <Select
                 value={selectedStory}
@@ -168,7 +115,6 @@ export default function SimpleCard() {
                 <option value='option7'>Saw</option>
                 <option value='option8'>Emo</option>
             </Select>
-
             <Stack spacing={10}>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
@@ -176,7 +122,7 @@ export default function SimpleCard() {
                 justify={'space-between'}>
                 <Checkbox fontSize="18">I am not a murderer or a bot</Checkbox>
               </Stack>
-              <Button
+              <Link href="/story"><Button
               fontSize="17"
               width={220}
               height={50}
@@ -188,13 +134,12 @@ export default function SimpleCard() {
                 }}
                 onClick={() => {
                   const id = Math.round(Math.random()*999999) //noncontinuous
-                  writeNewEvent(5, nameInput1, linkInput, imageInput, descriptionInput, featuringInput, 1671974193, cityInput,venueInput, "rap", "soul")
-                  writeEnum(nameInput1, nameInput2, nameInput3, nameInput4, nameInput5, cityInput, )
+                  writeEnum(nameInput1, nameInput2, nameInput3, nameInput4, nameInput5, cityInput, selectedStory)
                       }
                   }
                 >
                 Tell me a story
-              </Button>
+              </Button></Link>
             </Stack>
           </Stack>
         </Box>

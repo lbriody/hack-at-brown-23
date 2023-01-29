@@ -5,8 +5,8 @@ import static spark.Spark.after;
 import java.util.HashSet;
 import java.util.Set;
 
+import server.Handlers.TokenHandler;
 import server.utility.HandlerInterface;
-import server.Handlers.SpotifyHandler;
 import spark.Spark;
 
 
@@ -28,7 +28,7 @@ public class Server {
       response.header("Access-Control-Allow-Methods", "*");
     });
 
-    handlers.add(new SpotifyHandler());
+    handlers.add(new TokenHandler());
     for (HandlerInterface handler : handlers) {
       Spark.get(handler.getPath(), handler);
     }
