@@ -3,7 +3,9 @@ import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-import {dalle, gpt, StoryType } from "../../OpenaiHandlers"
+//import source from './black-50.jpeg';
+import {dalle, gpt, StoryType } from "../../OpenaiHandlers";
+import zIndex from "@mui/material/styles/zIndex";
 
 
 function StoryPage() {
@@ -61,17 +63,26 @@ function StoryPage() {
             id = "dom-flex"
             className ="Login-header" 
             bg='black'
-            bgImage={source} //MUST be imported this way, otherwise will break
-            //Chakra docs are WRONG^^^
+            padding={150}
+            fontSize='29'
+            fontWeight='bold'
+            //bgImage={source} //MUST be imported this way, otherwise will break
+            // //Chakra docs are WRONG^^^
             bgSize = "cover"
             bgPosition="center -10"
             height= "100vh"
             align="center"
             justify= "center"
           >          
-            
-            <Heading fontSize="48" pos="absolute" top="20">GHOSTWRITER</Heading>
-            
+            <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg"
+            alt= 'dang it'
+            width='100vw'
+            height='100vh'
+            opacity={'50%'}
+            position='absolute'
+            zIndex={1}
+            />
+            <Box zIndex={2}>
             <Typewriter
               onInit={(typewriter) => {
                 setIsTyping(true);
@@ -100,9 +111,9 @@ function StoryPage() {
               options = {{
                 deleteSpeed: 2,
                 delay: 75,
-                cursor: "|"
+                cursor: "|",
               }}               
-            />
+            /></Box>
             { isTyping 
                     ? <ChoiceComponant></ChoiceComponant>
                     : null
