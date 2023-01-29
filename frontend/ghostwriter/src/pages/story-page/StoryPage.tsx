@@ -2,9 +2,7 @@ import { useEffect, useState } from "react"
 import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
-import {dalle, text} from "../../OpenaiHandlers"
-import { setMaxIdleHTTPParsers } from "http";
-import SelectInput from "@mui/material/Select/SelectInput";
+import {dalle, text, StoryType } from "../../OpenaiHandlers"
 
 
 function StoryPage() {
@@ -23,7 +21,7 @@ function StoryPage() {
             setSource(response);
           }
         }
-      )
+      );
     });
 
     return (
