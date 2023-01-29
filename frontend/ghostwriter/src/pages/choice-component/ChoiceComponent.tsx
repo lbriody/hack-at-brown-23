@@ -1,10 +1,11 @@
 import { Button, Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import React from 'react';
+import branch from '../story-page/StoryPage';
 
-export default function ChoiceComponant({handleData}) {
-  const [value, setValue] = React.useState('A')
+export default function ChoiceComponant() {
+  const [val, setValue] = React.useState('A')
   return (
-    <RadioGroup onChange={setValue} value={value}>
+    <RadioGroup onChange={setValue} value={val}>
       <Stack direction='row'>
         <Radio value='A'>Choose A</Radio>
         <Radio value='B'>Choose B</Radio>
@@ -12,7 +13,7 @@ export default function ChoiceComponant({handleData}) {
       </Stack>
     <Button 
       type="submit"
-      onClick={() => {handleData(value)}}
+      onClick={() => {branch(val)}}
     >
       Submit
     </Button>
