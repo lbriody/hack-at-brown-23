@@ -82,8 +82,7 @@ function StoryPage() {
             onInit={(typewriter) => {
               typewriter.callFunction(() => { setIsTyping(true) });
               // Parses reponse into paragraphs
-              // getResponse()
-              setResponse("Please work\n")
+              getResponse()
               response.split('\n')
                       .map((par) => par.trim())
                       .filter((par) => {
@@ -111,10 +110,6 @@ function StoryPage() {
                   ? null
                   : <ChoiceComponant></ChoiceComponant>
               }
-
-          {/* <Show breakpoint= {{isTyping}}>
-            <ChoiceComponant></ChoiceComponant>
-          </Show> */}
           
           </Flex>
         </Box>
