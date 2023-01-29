@@ -67,7 +67,8 @@ function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
               type="text"
               bgColor="black"
               aria-label={ariaLabel}
-              borderRadius='12'
+              borderRadius='18'
+              maxW='370'
       ></Input>
       )
   }
@@ -110,11 +111,10 @@ export default function SimpleCard() {
             </FormControl>
             <FormControl id="Vibe">
               <FormLabel fontSize="18" fontWeight="bold">Vibe</FormLabel>
-
-            </FormControl>
-            <Select
-              borderRadius='12'
+              <Select
+              borderRadius='18'
               bgColor={'black'}
+              maxW='370'
                 value={selectedStory}
                 onChange={event => setSelectedStory(event.target.value)}>
                 <option value='option1'>Funny</option>
@@ -126,6 +126,7 @@ export default function SimpleCard() {
                 <option value='option7'>Saw</option>
                 <option value='option8'>Emo</option>
             </Select>
+            </FormControl>
             <Stack spacing={10}>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
