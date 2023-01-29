@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
-import {dalle, text} from "../../OpenaiHandlers"
+import {dalle, Person, text, StoryType } from "../../OpenaiHandlers"
 
 
 function StoryPage() {
@@ -24,7 +24,21 @@ function StoryPage() {
       }
     }
 
+    
+    const people = [new Person("John", "he/him"), new Person("Jane", "she/her"), new Person("Jill", "they/them")];
+    const location = "the woods";
+    const storyType = StoryType.SPOOKY;
+
+    
     useEffect(() => {
+      window.addEventListener("click",handleClick);
+      return () => {
+        window.removeEventListener("click",handleClick);
+      }
+
+    });
+
+    const handleClick = () => {
       dalle("A fish flying over the rainbow").then(
         response => {
           if (response == undefined) {
@@ -35,8 +49,7 @@ function StoryPage() {
           }
         }
       )
-
-    });
+    }
 
     return (
       <Stack>
