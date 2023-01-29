@@ -3,12 +3,17 @@ import privateKey from "./private/key";
 // import { Dalle } from "dalle-node";
 
 
-enum StoryType {
-    SPOOKY = "spooky",
-    ROMANTIC = "romantic",
-    FUNNY = "funny",
-    SCARY = "scary"
-}
+// enum StoryType {
+//     ROMANTIC = "romantic",
+//     FUNNY = "funny",
+//     SCARY = "scary",
+//     ELDRICH = "eldrich",
+//     MORBID = "morbid",
+//     YTAPOLOGY = "youtuber apology video",
+//     SAW = "saw",
+//     EMO = "emo",
+
+// }
 
 enum callType {
     START,
@@ -23,13 +28,15 @@ enum callType {
 class GptCall {
     names: string[];
     location: string;
-    storyType: StoryType;
+    storyType: string;
 
-    constructor(names: string[], location: string, storyType: StoryType) {
+    constructor(names: string[], location: string, storyType: string) {
         this.names = names;
         this.location = location;
         this.storyType = storyType;
     }
+
+    
 
     async call(call: callType) {
         let prompt = "";
@@ -91,6 +98,9 @@ async function gpt(prompt: string) {
         temperature: 0.6,
         max_tokens: 2048,
       });
+      if (result.data.choices[0].text === undefined) {
+        return "";
+      }
     return result.data.choices[0].text;
     };
 
@@ -134,4 +144,4 @@ async function gpt(prompt: string) {
 //   Names:`;
 // }
 
-export { dalle, gpt, StoryType, GptCall }
+export { dalle, GptCall, callType}
