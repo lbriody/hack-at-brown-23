@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
+import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import {dalle, text, StoryType } from "../../OpenaiHandlers"
+import ChoiceComponant from "../choice-component/ChoiceComponent";
 
 
 function StoryPage() {
@@ -111,6 +112,10 @@ function StoryPage() {
                 deleteSpeed: 1
               }}               
             />
+
+            <Show breakpoint='(max-width: 2000px)'>
+              <ChoiceComponant></ChoiceComponant>
+            </Show>
             
             </Flex>
           </Box>

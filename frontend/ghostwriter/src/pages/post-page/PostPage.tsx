@@ -12,6 +12,7 @@ import {
   Text,
   Divider,
   useColorModeValue,
+  Select,
 } from '@chakra-ui/react';
 
 import { getDatabase, ref, set } from "firebase/database";
@@ -99,6 +100,7 @@ function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
 export default function SimpleCard() {
   const [nameInput, setNameInput] = useState<string>("")
   const [cityInput, setCityInput] = useState<string>("")
+  const [selectedValue, setSelectedValue] = useState("");
 
   const CLIENT_ID = "0dfecd40e87344e0adf73728e2317442"
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
@@ -132,6 +134,14 @@ export default function SimpleCard() {
               <FormLabel>Setting</FormLabel>
               <ControlledInput value={cityInput} setValue={setCityInput} ariaLabel={"city"}/>
             </FormControl>
+            <Select
+            value={selectedValue}
+            onChange={event => setSelectedValue(event.target.value)}
+        >
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </Select>
             <Stack spacing={10}>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
@@ -140,7 +150,7 @@ export default function SimpleCard() {
                 <Checkbox>I am not a murderer</Checkbox>
               </Stack>
               <Link href="/story">
-                        <Button bg='#4F11FF' color='#FFFFFF' top = "-12"> Submit! </Button>
+                        <Button bg='#4F11FF' color='#FFFFFF' top = "-12"> Submit! {selectedValue} </Button>
                     </Link>
             </Stack>
           </Stack>
