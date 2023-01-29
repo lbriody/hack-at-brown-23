@@ -12,13 +12,14 @@ import {
   Text,
   Divider,
   useColorModeValue,
+  Select,
 } from '@chakra-ui/react';
 
 import { getDatabase, ref, set } from "firebase/database";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { Dispatch, useState, SetStateAction } from 'react';
-import {Select, OptionBase, GroupBase} from "chakra-react-select";
+import {OptionBase, GroupBase} from "chakra-react-select";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -91,15 +92,15 @@ function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
       )
   }
 
-const storyOptions = [{value:'option1', label:"Funny"}, {value:'option2', label:"Scary"}, 
-{value:'option4', label:"Eldrich"}, {value:'option3', label:"Scary"},  {value:'option5', label:"Morbid"}, 
-{value:'option6', label:"Youtuber apology video"}, {value:'option7', label:"Saw"}, {value:'option8', label:"Emo"}];
+// const storyOptions = [{value:'option1', label:"Funny"}, {value:'option2', label:"Scary"}, 
+// {value:'option4', label:"Eldrich"}, {value:'option3', label:"Scary"},  {value:'option5', label:"Morbid"}, 
+// {value:'option6', label:"Youtuber apology video"}, {value:'option7', label:"Saw"}, {value:'option8', label:"Emo"}];
 
 
-interface StoryOption extends OptionBase {
-  label: string;
-  value: string; 
-}
+// interface StoryOption extends OptionBase {
+//   label: string;
+//   value: string; 
+// }
 
 
 
@@ -118,7 +119,7 @@ export default function SimpleCard() {
   const [venueInput, setVenueInput] = useState<string>("")
   const [genre1Input, setGenre1Input] = useState<string>("")
   const [genre2Input, setGenre2Input] = useState<string>("")
-  const [selectedStory, setSelectedStory] = useState<string>("")
+  const [selectedStory, setSelectedStory] = useState("")
 
   // const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
   //   if(event && event.target) {
@@ -154,30 +155,20 @@ export default function SimpleCard() {
             </FormControl>
             <FormControl id="Vibe">
               <FormLabel fontSize="18" fontWeight="bold">Vibe</FormLabel>
-            {/* <Select placeholder='Select option' bgColor='black'>
-                <option value='option1'>Funny</option>
-                <option value='option2'>Romantic</option>
-                <option value='option3'>Scary</option>
-                <option value='option4'>Eldrich</option>
-                <option value='option5'>Morbid</option>
-                <option value='option6'>Youtuber apology video</option>
-                <option value='option7'>Saw</option>
-                <option value='option8'>Emo</option>
-              </Select> */}
-            {/* <Select
-                value={selectedStory}
-                onChange={handleChange}>
-                <option value='option1'>Funny</option>
-                <option value='option2'>Romantic</option>
-                <option value='option3'>Scary</option>
-                <option value='option4'>Eldrich</option>
-                <option value='option5'>Morbid</option>
-                <option value='option6'>Youtuber apology video</option>
-                <option value='option7'>Saw</option>
-                <option value='option8'>Emo</option>
-            </Select> */}
-
             </FormControl>
+            <Select
+                value={selectedStory}
+                onChange={event => setSelectedStory(event.target.value)}>
+                <option value='option1'>Funny</option>
+                <option value='option2'>Romantic</option>
+                <option value='option3'>Scary</option>
+                <option value='option4'>Eldrich</option>
+                <option value='option5'>Morbid</option>
+                <option value='option6'>Youtuber apology video</option>
+                <option value='option7'>Saw</option>
+                <option value='option8'>Emo</option>
+            </Select>
+
             <Stack spacing={10}>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
