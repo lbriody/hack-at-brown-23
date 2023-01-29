@@ -48,6 +48,7 @@ function StoryPage() {
     let trimmed = filtered.map((par) => par.trim())
 
     const [source, setSource] = useState<string>("");    
+    const [isShowing, setisShowing] = useState<boolean>(true);  
 
     // const people = ["John (he/him)", "Jane (she/her)", "Jill (they/them)"];
     // const location = "the woods";
@@ -70,10 +71,13 @@ function StoryPage() {
             console.log("ERROR");
           } else {
             console.log("CLICKED")
+            // setisShowing(!isShowing)
             console.log(response);
             dalle(response)
           }
         }
+      ).catch(
+        (err) => { console.log(err) }
       );
     };
 
@@ -112,10 +116,14 @@ function StoryPage() {
                 deleteSpeed: 1
               }}               
             />
+            { isShowing 
+                    ? <ChoiceComponant></ChoiceComponant>
+                    : null
+                }
 
-            <Show breakpoint='(max-width: 2000px)'>
+            {/* <Show breakpoint= {{isShowing}}>
               <ChoiceComponant></ChoiceComponant>
-            </Show>
+            </Show> */}
             
             </Flex>
           </Box>
