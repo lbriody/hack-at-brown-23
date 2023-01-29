@@ -19,7 +19,6 @@ import { getDatabase, ref, set } from "firebase/database";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { Dispatch, useState, SetStateAction } from 'react';
-import {OptionBase, GroupBase} from "chakra-react-select";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -58,7 +57,7 @@ function ControlledInput({value, setValue, ariaLabel}: ControlledInputProps) {
               bgColor="black"
               aria-label={ariaLabel}
               borderRadius='18'
-              maxW='350'
+              maxW='370'
       ></Input>
       )
   }
@@ -104,7 +103,7 @@ export default function SimpleCard() {
               <Select
               borderRadius='18'
               bgColor={'black'}
-              maxW='350'
+              maxW='370'
                 value={selectedStory}
                 onChange={event => setSelectedStory(event.target.value)}>
                 <option value='option1'>Funny</option>

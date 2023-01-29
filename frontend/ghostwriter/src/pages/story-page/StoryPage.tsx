@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
+import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import {dalle, text, StoryType } from "../../OpenaiHandlers"
+import ChoiceComponant from "../choice-component/ChoiceComponent";
 
 
 function StoryPage() {
@@ -47,6 +48,7 @@ function StoryPage() {
     let trimmed = filtered.map((par) => par.trim())
 
     const [source, setSource] = useState<string>("");    
+    const [isShowing, setisShowing] = useState<boolean>(true);  
 
     // const people = ["John (he/him)", "Jane (she/her)", "Jill (they/them)"];
     // const location = "the woods";
@@ -69,10 +71,13 @@ function StoryPage() {
             console.log("ERROR");
           } else {
             console.log("CLICKED")
+            // setisShowing(!isShowing)
             console.log(response);
             dalle(response)
           }
         }
+      ).catch(
+        (err) => { console.log(err) }
       );
     };
 
@@ -80,8 +85,9 @@ function StoryPage() {
       <Stack>
         <Box className="Login">
           <Flex 
+          color='white'
             className ="Login-header" 
-            bg="#EFE7FC" 
+            bg='black'
             bgImage={source} //MUST be imported this way, otherwise will break
             //Chakra docs are WRONG^^^
             bgSize = "cover"
@@ -91,7 +97,7 @@ function StoryPage() {
             justify= "center"
           >          
               
-            <Heading fontSize="48" pos="absolute" top="20">GHOSTWRITER</Heading>
+            <Heading fontSize="48" pos="absolute" top="20">GhostWriter</Heading>
 
             <Typewriter
               onInit={(typewriter) => {
@@ -111,6 +117,14 @@ function StoryPage() {
                 deleteSpeed: 1
               }}               
             />
+            { isShowing 
+                    ? <ChoiceComponant></ChoiceComponant>
+                    : null
+                }
+
+            {/* <Show breakpoint= {{isShowing}}>
+              <ChoiceComponant></ChoiceComponant>
+            </Show> */}
             
             </Flex>
           </Box>
