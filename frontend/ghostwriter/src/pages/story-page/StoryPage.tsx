@@ -3,7 +3,9 @@ import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-import {dalle, GptCall, callType} from "../../OpenaiHandlers"
+//import source from './black-50.jpeg';
+import {dalle, GptCall, callType} from "../../OpenaiHandlers";
+import zIndex from "@mui/material/styles/zIndex";
 import { userDataMap } from "../post-page/PostPage";
 import { eventWrapper } from "@testing-library/user-event/dist/utils";
 import { callExpression } from "@babel/types";
@@ -48,17 +50,29 @@ function StoryPage() {
           id = "dom-flex"
           className ="Login-header" 
           bg='black'
-          bgImage={source} //MUST be imported this way, otherwise will break
-          //Chakra docs are WRONG^^^
+            padding={150}
+            fontSize='29'
+            fontWeight='bold'
+          //bgImage={source} //MUST be imported this way, otherwise will break
+          // //Chakra docs are WRONG^^^
+
+          /**Uncomment to generate image */
+
           bgSize = "cover"
           bgPosition="center -10"
           height= "100vh"
           align="center"
           justify= "center"
         >          
-          
-          <Heading fontSize="48" pos="absolute" top="20">GHOSTWRITER</Heading>
-          
+          <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg"
+          alt= 'dang it'
+            width='100vw'
+            height='100vh'
+            opacity={'50%'}
+            position='absolute'
+            zIndex={1}
+            />
+          <Box zIndex={2}>
           <Typewriter
             key={response}
             onInit={(typewriter) => {
@@ -78,23 +92,26 @@ function StoryPage() {
                         typewriter.typeString(par)
                         typewriter.deleteAll()
                         typewriter.start();
-              setIsTyping(false);
+                        setIsTyping(false);
+              
               }
             )}}
             options = {{
               deleteSpeed: 0,
               delay: 75,
-              cursor: "|"
+              cursor: "|",
             }}               
-          />
-          { isTyping 
+          /></Box>
+          {/* { isTyping 
                   ? <ChoiceComponant></ChoiceComponant>
                   : null
-              }
+              } */}
 
-          {/* <Show breakpoint= {{isTyping}}>
-            <ChoiceComponant></ChoiceComponant>
-          </Show> */}
+          {!isTyping && (
+        <Box p="20px" bg="green.500" color="white">
+          <ChoiceComponant></ChoiceComponant>
+        </Box>
+      )}
           
           </Flex>
         </Box>

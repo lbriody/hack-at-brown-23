@@ -36,7 +36,6 @@ function LoginPage() {
               </Box>
             </Stack>
             
-              
     );
 
 }
