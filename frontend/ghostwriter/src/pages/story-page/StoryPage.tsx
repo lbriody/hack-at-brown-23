@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
-import {dalle, text} from "../../OpenaiHandlers"
+import {dalle, Person, text, StoryType } from "../../OpenaiHandlers"
 
 
 function StoryPage() {
@@ -24,29 +24,7 @@ function StoryPage() {
       }
     }
 
-    // useEffect(() => {
-    //   dalle("A fish flying over the rainbow").then(
-    //     response => {
-    //       if (response == undefined) {
-    //         console.log("ERROR");
-    //       } else {
-    //         console.log("USEFFECT CALLED");
-    //         setSource(response);
-    //       }
-    //     }
-    //   )
-
-    // });
-
     useEffect(() => {
-      window.addEventListener("click",handleScroll);
-      return () => {
-        window.removeEventListener("click",handleScroll);
-      }
-
-    });
-
-    const handleScroll = () => {
       dalle("A fish flying over the rainbow").then(
         response => {
           if (response == undefined) {
