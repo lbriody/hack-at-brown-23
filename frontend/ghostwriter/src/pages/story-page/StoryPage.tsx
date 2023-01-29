@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Stack, Heading, Image, Button, Box, Text, Flex} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
-import {dalle, Person, text, StoryType } from "../../OpenaiHandlers"
+import {dalle, text, StoryType } from "../../OpenaiHandlers"
 
 
 function StoryPage() {
@@ -25,7 +25,7 @@ function StoryPage() {
     }
 
     
-    const people = [new Person("John", "he/him"), new Person("Jane", "she/her"), new Person("Jill", "they/them")];
+    const people = ["John (he/him)", "Jane (she/her)", "Jill (they/them)"];
     const location = "the woods";
     const storyType = StoryType.SPOOKY;
 
@@ -39,32 +39,32 @@ function StoryPage() {
     });
 
 
-    const sampleGpt = "\
-\
-John and Jane had been childhood friends, but ever since they had grown up, their paths had hardly crossed. So when Jane called John out of the blue to ask him to join her and her friend Jill for a camping trip in the woods, John eagerly accepted.\
-\
-The three of them set off in the early morning, and despite the chilly air, they were in high spirits. It wasn’t long before they arrived at their destination. They set up camp, and before long, they were all gathered around the campfire, telling stories and roasting marshmallows.\
-\
-As the night wore on, Jane and John started to feel a bit uneasy. They both had a strange feeling that someone or something was watching them. Even Jill, who normally was not one to be spooked, seemed to be on edge.\
-\
-The three of them were starting to get ready to turn in for the night when they heard a loud, shrill scream coming from the woods. It sounded like it was coming from a woman. Jane and John looked at each other with wide eyes, and Jill, who had gone pale, spoke in a shaky voice.\
-\
-“We should get out of here. Now.”\
-\
-The three of them quickly packed up their things and started to make their way back towards the car. As they made their way through the darkness, they heard the same scream again, this time much closer. They started to run, but before they could make it to the car, they heard the sound of heavy footsteps behind them.\
-\
-John and Jane both turned around, and were horrified to see a ghostly figure standing in the shadows. It was a woman, dressed in a long white dress and wearing a veil over her face. She was transparent, and her eyes were glowing in the darkness.\
-\
-The three of them stopped in their tracks, frozen in fear. Then, the woman spoke in a low, haunting voice.\
-\
-“You should not have come here. Leave now, or else you will become one of us.”\
-\
-Without another word, the three of them turned and ran as fast as they could, not stopping until they made it back to the safety of their car.\
-\
-John and Jane never spoke of the incident again, but ever since that night, they have both had a feeling that the woman in white was still out there in the woods, watching them from the shadows."
+    const sampleGpt = `
+
+John and Jane had been childhood friends, but ever since they had grown up, their paths had hardly crossed. So when Jane called John out of the blue to ask him to join her and her friend Jill for a camping trip in the woods, John eagerly accepted.
+
+The three of them set off in the early morning, and despite the chilly air, they were in high spirits. It wasn’t long before they arrived at their destination. They set up camp, and before long, they were all gathered around the campfire, telling stories and roasting marshmallows.
+
+As the night wore on, Jane and John started to feel a bit uneasy. They both had a strange feeling that someone or something was watching them. Even Jill, who normally was not one to be spooked, seemed to be on edge.
+
+The three of them were starting to get ready to turn in for the night when they heard a loud, shrill scream coming from the woods. It sounded like it was coming from a woman. Jane and John looked at each other with wide eyes, and Jill, who had gone pale, spoke in a shaky voice.
+
+“We should get out of here. Now.”
+
+The three of them quickly packed up their things and started to make their way back towards the car. As they made their way through the darkness, they heard the same scream again, this time much closer. They started to run, but before they could make it to the car, they heard the sound of heavy footsteps behind them.
+
+John and Jane both turned around, and were horrified to see a ghostly figure standing in the shadows. It was a woman, dressed in a long white dress and wearing a veil over her face. She was transparent, and her eyes were glowing in the darkness.
+
+The three of them stopped in their tracks, frozen in fear. Then, the woman spoke in a low, haunting voice.
+
+“You should not have come here. Leave now, or else you will become one of us.”
+
+Without another word, the three of them turned and ran as fast as they could, not stopping until they made it back to the safety of their car.
+
+John and Jane never spoke of the incident again, but ever since that night, they have both had a feeling that the woman in white was still out there in the woods, watching them from the shadows.`
 
     const handleClick = () => {
-      text(people,location,storyType).then(
+      text("Sampletext").then(
         response => {
           if (response == undefined) {
             console.log("ERROR");
