@@ -28,7 +28,7 @@ function LoginPage() {
                 {/* add top tracks images here also think about what happens with errors*/}
               
                   
-                <Heading fontSize="40" pos="absolute" top="20" left="130" color="white">Welcome to GhostWriter</Heading>
+                <Heading fontSize="40" pos="absolute" top="120" left="130" color="white">Welcome to GhostWriter</Heading>
                 <PostPage></PostPage>
                   
                 </Flex>
