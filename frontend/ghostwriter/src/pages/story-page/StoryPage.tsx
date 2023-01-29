@@ -8,7 +8,7 @@ import { eventWrapper } from "@testing-library/user-event/dist/utils";
 
 
 function StoryPage() {
-    const response = `
+    const [response, setResponse] = useState<string>(`
 
     John and Jane had been childhood friends, but ever since they had grown up, their paths had hardly crossed. So when Jane called John out of the blue to ask him to join her and her friend Jill for a camping trip in the woods, John eagerly accepted.
     
@@ -30,7 +30,7 @@ function StoryPage() {
     
     Without another word, the three of them turned and ran as fast as they could, not stopping until they made it back to the safety of their car.
     
-    John and Jane never spoke of the incident again, but ever since that night, they have both had a feeling that the woman in white was still out there in the woods, watching them from the shadows.`
+    John and Jane never spoke of the incident again, but ever since that night, they have both had a feeling that the woman in white was still out there in the woods, watching them from the shadows.`);
     
     const [source, setSource] = useState<string>(""); 
     const [isTyping, setIsTyping] = useState<boolean>(true);
@@ -77,8 +77,10 @@ function StoryPage() {
             <Heading fontSize="48" pos="absolute" top="20">GHOSTWRITER</Heading>
             
             <Typewriter
+              key={response}
               onInit={(typewriter) => {
                 setIsTyping(true);
+                // Parses reponse into paragraphs
                 response.split('\n')
                         .map((par) => par.trim())
                         .filter((par) => {
@@ -87,6 +89,7 @@ function StoryPage() {
                           } else {
                             return false;
                           }})
+                        // Maps paragraphs into strings to be typed and renders images via dall-e
                         .forEach((par) => {
                           typewriter.callFunction(() => { callDallE(par) }) 
                           typewriter.typeString(par)
