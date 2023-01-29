@@ -1,5 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
-import privateKey from "./private/key"
+import privateKey from "./private/key";
+// import { Dalle } from "dalle-node";
+
 
 enum StoryType {
     SPOOKY = "spooky",
@@ -60,20 +62,21 @@ class GptCall {
 //     }
 // }
 
-async function dalle(prompt: string) {
+async function dalle(p: string) {
+
     console.log("DALLE CALLED")
     const configuration = new Configuration({
-        apiKey: privateKey,
+        apiKey: privateKey
       });    
     const openai = new OpenAIApi(configuration);
     const generateImage = await openai.createImage({
-          prompt: prompt,
+          prompt: "A ghost in a purple house",
           n: 1,
-          size: "256x256",
+          size: "256x256"
         });
-    
     return generateImage.data.data[0].url;
 }
+
 
 async function gpt(prompt: string) {
     console.log(prompt);

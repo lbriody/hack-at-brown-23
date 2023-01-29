@@ -63,14 +63,14 @@ function StoryPage() {
 
 
     const handleClick = () => {
-      text("Sampletext").then(
+      dalle("wrueb").then(
         response => {
           if (response == undefined) {
             console.log("ERROR");
           } else {
-            console.log("CLICKED")
+            setSource(response);
+            console.log("CLICKED");
             console.log(response);
-            dalle(response)
           }
         }
       );
