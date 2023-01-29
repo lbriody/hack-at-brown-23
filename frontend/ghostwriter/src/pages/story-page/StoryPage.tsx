@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react"
-import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/react';
+import { useState } from "react"
+import { Stack, Heading, Box, Flex, Image} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
-import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-//import source from './black-50.jpeg';
-import {dalle, GptCall, callType} from "../../OpenaiHandlers";
+import source from './black-50.jpeg';
+import {dalle, GptCall, callType } from "../../OpenaiHandlers";
 import zIndex from "@mui/material/styles/zIndex";
 import { userDataMap } from "../post-page/PostPage";
-import { eventWrapper } from "@testing-library/user-event/dist/utils";
-import { callExpression } from "@babel/types";
 
 async function startStory() {
   const caller = new GptCall(userDataMap.get("names"), userDataMap.get("location"), userDataMap.get("storyType"));
@@ -16,7 +13,9 @@ async function startStory() {
 }
 
 function StoryPage() {
-  const [response, setResponse] = useState<string>("startStory().then (response => { return response; })");
+  const [optNum, setOptNum] = useState<number>(0);
+  const [responsePromise, setResponsePromise] = useState<Promise<string>>(startStory());
+  const [response, setResponse] = useState<string>("");
   const [source, setSource] = useState<string>(""); 
   const [isTyping, setIsTyping] = useState<boolean>(true);
 
@@ -38,8 +37,16 @@ function StoryPage() {
     });
   }
 
-  const generateWrapper = () =>  {
-    return ( '<span className="Typewriter__wrapper"></span>' );
+  const getResponse = () => {
+    if (responsePromise === undefined) {
+      console.log("ERROR");
+    } else {
+      responsePromise.then((res) =>{
+        setResponse(res)
+        console.log("WORKING");
+        console.log(response);
+      })
+    }
   }
 
   return (
@@ -66,18 +73,19 @@ function StoryPage() {
         >          
           <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg"
           alt= 'dang it'
-            width='100vw'
-            height='100vh'
+          width='100vw'
+          height='100vh'
             opacity={'50%'}
             position='absolute'
             zIndex={1}
             />
           <Box zIndex={2}>
           <Typewriter
-            key={response}
+            key={optNum}
             onInit={(typewriter) => {
-              setIsTyping(true);
+              typewriter.callFunction(() => { setIsTyping(true) });
               // Parses reponse into paragraphs
+              getResponse()
               response.split('\n')
                       .map((par) => par.trim())
                       .filter((par) => {
@@ -91,9 +99,8 @@ function StoryPage() {
                         typewriter.callFunction(() => { callDallE(par) }) 
                         typewriter.typeString(par)
                         typewriter.deleteAll()
-                        typewriter.start();
-                        setIsTyping(false);
-              
+              typewriter.start();
+              typewriter.callFunction(() => { setIsTyping(false) });
               }
             )}}
             options = {{
@@ -102,16 +109,10 @@ function StoryPage() {
               cursor: "|",
             }}               
           /></Box>
-          {/* { isTyping 
-                  ? <ChoiceComponant></ChoiceComponant>
-                  : null
-              } */}
-
-          {!isTyping && (
-        <Box p="20px" bg="green.500" color="white">
-          <ChoiceComponant></ChoiceComponant>
-        </Box>
-      )}
+          { isTyping 
+                  ? null
+                  : <ChoiceComponant></ChoiceComponant>
+              }
           
           </Flex>
         </Box>
