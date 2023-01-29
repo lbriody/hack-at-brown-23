@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from "openai";
-import privateKey from "./private/key";
+import privateKey from "./private/key"
 
 enum StoryType {
     SPOOKY = "spooky",
