@@ -61,7 +61,7 @@ class GptCall {
 // }
 
 async function dalle(prompt: string) {
-
+    console.log("DALLE CALLED")
     const configuration = new Configuration({
         apiKey: privateKey,
       });    
