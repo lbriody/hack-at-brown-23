@@ -37,9 +37,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 
+let userDataMap = new Map<string, any>();
+
 function writeEnum(nameInput1: string, nameInput2: string, nameInput3: string, 
   nameInput4: string, nameInput5: string, cityInput: string, selectedStory: string) {
     // TODO: write this function
+    const names = new Array<string>;
+    names.push(nameInput1); names.push(nameInput2); names.push(nameInput3); names.push(nameInput4); names.push(nameInput5);
+    const location=cityInput;
+    const storyType = selectedStory;
+
+    userDataMap.set("names", names);
+    userDataMap.set("location", location);
+    userDataMap.set("storyType", storyType);
+    
 }
 
 
@@ -149,3 +160,5 @@ export default function SimpleCard() {
     </Box>
   );
 }
+
+export {userDataMap}

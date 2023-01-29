@@ -3,17 +3,18 @@ import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/
 import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-import {dalle, GptCall,StoryType, callType} from "../../OpenaiHandlers"
+import {dalle, GptCall, callType} from "../../OpenaiHandlers"
+import { userDataMap } from "../post-page/PostPage";
 
 
 function StoryPage() {
-  const names = new Array<string>;
-  names.push("colden");
-  names.push("maya");
-  names.push("luke");
-  const location = "milwaukee";
-  const storyType = ""
-  const caller = new GptCall(names, location, StoryType.FUNNY);
+  // const names = new Array<string>;
+  // names.push("colden");
+  // names.push("maya");
+  // names.push("luke");
+  // const location = "milwaukee";
+  // const storyType = StoryType.FUNNY;
+  const caller = new GptCall(userDataMap.get("names"), userDataMap.get("location"), userDataMap.get("storyType"));
   const response = caller.call(callType.START)
     // const response = `
 
