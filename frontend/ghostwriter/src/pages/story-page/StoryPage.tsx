@@ -39,7 +39,7 @@ function StoryPage() {
             height= "100vh"
             align="center"
             justify= "center"
-            >          
+          >          
               
             <Heading fontSize="48" pos="absolute" top="20">GHOSTWRITER</Heading>
 
