@@ -51,9 +51,6 @@ class GptCall {
     }
 }
 
-
-
-
 // class Person {
 //     name: string;
 //     pronouns: string;
@@ -62,7 +59,6 @@ class GptCall {
 //         this.pronouns = pronouns;
 //     }
 // }
-
 
 async function dalle(prompt: string) {
 
