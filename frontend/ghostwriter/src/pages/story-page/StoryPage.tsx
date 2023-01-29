@@ -4,6 +4,7 @@ import Typewriter from 'typewriter-effect';
 import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
 import {dalle, gpt, StoryType } from "../../OpenaiHandlers"
+import { eventWrapper } from "@testing-library/user-event/dist/utils";
 
 
 function StoryPage() {
@@ -32,8 +33,8 @@ function StoryPage() {
     John and Jane never spoke of the incident again, but ever since that night, they have both had a feeling that the woman in white was still out there in the woods, watching them from the shadows.`
     
     const [source, setSource] = useState<string>(""); 
-    const [parNum, setParNum] = useState<number>(0);
     const [isTyping, setIsTyping] = useState<boolean>(true);
+
 
     const callDallE = (par: string) => {
       dalle(par).then(
@@ -42,7 +43,6 @@ function StoryPage() {
             console.log("ERROR");
           } else {
             setSource(response); //TODO: Update to book frame?
-            setParNum(parNum + 1);
             console.log("WORKING");
             console.log(response);
           }
@@ -51,6 +51,10 @@ function StoryPage() {
         console.log(par); 
         console.log("ERROR");
       });
+    }
+
+    const generateWrapper = () =>  {
+      return ( '<span className="Typewriter__wrapper"></span>' );
     }
 
     return (
@@ -84,21 +88,15 @@ function StoryPage() {
                             return false;
                           }})
                         .forEach((par) => {
-                          typewriter.callFunction(() => { callDallE(par) })
-                          // let newParNum = parNum + 1;
-                          // while (newParNum !=  parNum) {
-                          //   typewriter.pauseFor(100);
-                          // }                          
+                          typewriter.callFunction(() => { callDallE(par) }) 
                           typewriter.typeString(par)
-                          .pauseFor(1000)
-                          .deleteAll()
-                          .start();
-                        })
+                          typewriter.deleteAll()
+                          typewriter.start();
                 setIsTyping(false);
                 }
-              }
+              )}}
               options = {{
-                deleteSpeed: 2,
+                deleteSpeed: 0,
                 delay: 75,
                 cursor: "|"
               }}               
