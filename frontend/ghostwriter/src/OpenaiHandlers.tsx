@@ -19,6 +19,7 @@ async function dalle(prompt: string) {
     return generateImage.data.data[0].url;
 }
 
+
 function text(prompt: string) {
 
   const configuration = new Configuration({
@@ -38,7 +39,7 @@ function text(prompt: string) {
   return generateText();
 }
 
-function generatePrompt(prompt: string) {
+function generatePrompt(prompt: string[]) {
   const lower = prompt[0].toUpperCase() + prompt.slice(1).toLowerCase();
   return `Suggest three names for an animal that is a superhero.
 
