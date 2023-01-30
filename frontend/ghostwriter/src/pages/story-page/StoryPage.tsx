@@ -1,24 +1,44 @@
-import { useState } from "react"
-import { Stack, Heading, Box, Flex, Image} from '@chakra-ui/react';
+import { useEffect, useState } from "react"
+import { Stack, Heading, Image, Button, Box, Text, Flex, Show} from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
+import PostPage from '../post-page/PostPage'
 import ChoiceComponant from "../choice-component/ChoiceComponent";
-import source from './black-50.jpeg';
-import {dalle, GptCall, callType } from "../../OpenaiHandlers";
+//import source from './black-50.jpeg';
+import {dalle, GptCall, callType, gpt} from "../../OpenaiHandlers";
 import zIndex from "@mui/material/styles/zIndex";
 import { userDataMap } from "../post-page/PostPage";
+import { eventWrapper } from "@testing-library/user-event/dist/utils";
+import { callExpression } from "@babel/types";
 
-async function startStory() {
-  const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
-  const caller = new GptCall(data.get("names"), data.get("location"), data.get("storyType"));
-  return await caller.call(callType.START)
+// async function startStory() {
+//   const caller = new GptCall(userDataMap.get("names"), userDataMap.get("location"), userDataMap.get("storyType"));
+//   return await caller.call(callType.START)
+// }
+
+async function startStory(): Promise<string>{
+  // const caller = new GptCall(userDataMap.get("names"), userDataMap.get("location"), userDataMap.get("storyType"));
+  var names = ["jan", "elliot", "seb", "poetica", "jerry"];
+  const caller = new GptCall(names, "paris", "scary");
+  return await caller.call(callType.START);
+//   return await caller.call(callType.START)
+}
+
+async function handleStory(): Promise<string> {
+  // const response = await startStory();
+  const response = await startStory();
+  console.log(response)
+  return response;
 }
 
 function StoryPage() {
-  const [optNum, setOptNum] = useState<number>(0);
-  const [responsePromise, setResponsePromise] = useState<Promise<string>>(startStory());
   const [response, setResponse] = useState<string>("");
   const [source, setSource] = useState<string>(""); 
   const [isTyping, setIsTyping] = useState<boolean>(true);
+
+  const result: Promise<string> = handleStory();
+  result.then((response) => {
+    setResponse(response);
+  });
 
 
   const callDallE = (par: string) => {
@@ -38,28 +58,8 @@ function StoryPage() {
     });
   }
 
-  const getResponse = () => {
-    if (responsePromise === undefined) {
-      console.log("ERROR");
-    } else {
-      responsePromise.then((res) =>{
-        setResponse(res)
-        console.log("WORKING");
-        console.log(response);
-      })
-    }
-  }
-
-  const branch = (opt: number) => {
-    const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
-    callType.A_CONT prompt = "A, then offer another prompt.";
-        else if (call === callType.B_CONT)
-        else if (call === callType.C_CONT) 
-        else if (call === callType.A) 
-        else if (call === callType.B) 
-        else if (call === callType.C) 
-    setResponsePromise(caller.call(callType.BRANCH, opt));
-    setOptNum(opt);
+  const generateWrapper = () =>  {
+    return ( '<span className="Typewriter__wrapper"></span>' );
   }
 
   return (
@@ -75,9 +75,6 @@ function StoryPage() {
             fontWeight='bold'
           //bgImage={source} //MUST be imported this way, otherwise will break
           // //Chakra docs are WRONG^^^
-
-          /**Uncomment to generate image */
-
           bgSize = "cover"
           bgPosition="center -10"
           height= "100vh"
@@ -86,19 +83,18 @@ function StoryPage() {
         >          
           <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg"
           alt= 'dang it'
-          width='100vw'
-          height='100vh'
+            width='100vw'
+            height='100vh'
             opacity={'50%'}
             position='absolute'
             zIndex={1}
             />
           <Box zIndex={2}>
           <Typewriter
-            key={optNum}
+            key={response}
             onInit={(typewriter) => {
-              typewriter.callFunction(() => { setIsTyping(true) });
+              setIsTyping(true);
               // Parses reponse into paragraphs
-              getResponse()
               response.split('\n')
                       .map((par) => par.trim())
                       .filter((par) => {
@@ -112,8 +108,8 @@ function StoryPage() {
                         typewriter.callFunction(() => { callDallE(par) }) 
                         typewriter.typeString(par)
                         typewriter.deleteAll()
-              typewriter.start();
-              typewriter.callFunction(() => { setIsTyping(false) });
+                        typewriter.start();
+              setIsTyping(false);
               }
             )}}
             options = {{
@@ -123,9 +119,13 @@ function StoryPage() {
             }}               
           /></Box>
           { isTyping 
-                  ? null
-                  : <ChoiceComponant handleData={branch}></ChoiceComponant>
+                  ? <ChoiceComponant></ChoiceComponant>
+                  : null
               }
+
+          {/* <Show breakpoint= {{isTyping}}>
+            <ChoiceComponant></ChoiceComponant>
+          </Show> */}
           
           </Flex>
         </Box>
