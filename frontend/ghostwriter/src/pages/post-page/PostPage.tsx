@@ -50,6 +50,8 @@ function writeEnum(nameInput1: string, nameInput2: string, nameInput3: string,
     userDataMap.set("names", names);
     userDataMap.set("location", location);
     userDataMap.set("storyType", storyType);
+
+    window.localStorage.setItem("userDataMap", JSON.stringify(userDataMap));
     
 }
 

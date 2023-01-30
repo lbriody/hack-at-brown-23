@@ -8,7 +8,8 @@ import zIndex from "@mui/material/styles/zIndex";
 import { userDataMap } from "../post-page/PostPage";
 
 async function startStory() {
-  const caller = new GptCall(userDataMap.get("names"), userDataMap.get("location"), userDataMap.get("storyType"));
+  const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
+  const caller = new GptCall(data.get("names"), data.get("location"), data.get("storyType"));
   return await caller.call(callType.START)
 }
 
@@ -47,6 +48,18 @@ function StoryPage() {
         console.log(response);
       })
     }
+  }
+
+  const branch = (opt: number) => {
+    const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
+    callType.A_CONT prompt = "A, then offer another prompt.";
+        else if (call === callType.B_CONT)
+        else if (call === callType.C_CONT) 
+        else if (call === callType.A) 
+        else if (call === callType.B) 
+        else if (call === callType.C) 
+    setResponsePromise(caller.call(callType.BRANCH, opt));
+    setOptNum(opt);
   }
 
   return (
@@ -111,7 +124,7 @@ function StoryPage() {
           /></Box>
           { isTyping 
                   ? null
-                  : <ChoiceComponant></ChoiceComponant>
+                  : <ChoiceComponant handleData={branch}></ChoiceComponant>
               }
           
           </Flex>
