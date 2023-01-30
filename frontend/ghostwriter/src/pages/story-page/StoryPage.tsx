@@ -5,20 +5,29 @@ import ChoiceComponant from "../choice-component/ChoiceComponent";
 import source from './black-50.jpeg';
 import {dalle, GptCall, callType } from "../../OpenaiHandlers";
 import zIndex from "@mui/material/styles/zIndex";
-import { userDataMap } from "../post-page/PostPage";
+// import { userDataMap } from "../post-page/PostPage";
+// import { userDataMap } from "../post-page/PostPage";
 
 async function startStory() {
-  const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
-  const caller = new GptCall(data.get("names"), data.get("location"), data.get("storyType"));
+  const userDataMap = window.localStorage.getItem("userDataMap");
+  if (userDataMap === null) {
+    return "ERROR";
+  }
+  const data = JSON.parse(userDataMap);
+  console.log(data);
+
+  console.log(userDataMap);
+  const caller = new GptCall(data[0][1], data[1][1], data[2][1]);
   return await caller.call(callType.START)
 }
 
 function StoryPage() {
-  const [optNum, setOptNum] = useState<number>(0);
-  const [responsePromise, setResponsePromise] = useState<Promise<string>>(startStory());
+  // const [optNum, setOptNum] = useState<number>(0);
+  // const [responsePromise, setResponsePromise] = useState<Promise<string>>(startStory());
   const [response, setResponse] = useState<string>("");
   const [source, setSource] = useState<string>(""); 
   const [isTyping, setIsTyping] = useState<boolean>(true);
+
 
 
   const callDallE = (par: string) => {
@@ -38,29 +47,48 @@ function StoryPage() {
     });
   }
 
-  const getResponse = () => {
-    if (responsePromise === undefined) {
-      console.log("ERROR");
-    } else {
-      responsePromise.then((res) =>{
-        setResponse(res)
-        console.log("WORKING");
-        console.log(response);
-      })
-    }
-  }
 
-  const branch = (opt: number) => {
-    const data = JSON.parse(window.localStorage.getItem("userData") || "{}");
-    callType.A_CONT prompt = "A, then offer another prompt.";
-        else if (call === callType.B_CONT)
-        else if (call === callType.C_CONT) 
-        else if (call === callType.A) 
-        else if (call === callType.B) 
-        else if (call === callType.C) 
-    setResponsePromise(caller.call(callType.BRANCH, opt));
-    setOptNum(opt);
-  }
+
+
+const createTypewriter = (call: callType) => {
+  
+  // TODO: Add logic to handle different call types and 
+  // TODO: get response
+
+  const response = "\na fish flying over the rainbow\n"
+  
+  return (
+    <Typewriter
+    onInit={(typewriter) => {
+      // console.log("PRE-DALLE");
+      typewriter.callFunction(() => {  
+        console.log(response)
+        response.split('\n')
+                .map((par) => par.trim())
+                .filter((par) => {
+                  if (!(par === "")) {
+                    return true;
+                  } else {
+                    return false;
+                  }}
+        ).forEach((par) => {
+
+              callDallE(par)
+      console.log("POST-DALLE");
+                typewriter.typeString(par)});
+                typewriter.deleteAll()
+      typewriter.start();
+      // typewriter.callFunction(() => { setIsTyping(false) });
+      }
+    )}}
+    options = {{
+      deleteSpeed: 0,
+      delay: 75,
+      cursor: "|",
+    }}               
+  />
+  )
+}
 
   return (
     <Stack>
@@ -73,7 +101,7 @@ function StoryPage() {
             padding={150}
             fontSize='29'
             fontWeight='bold'
-          //bgImage={source} //MUST be imported this way, otherwise will break
+          bgImage={source} //MUST be imported this way, otherwise will break
           // //Chakra docs are WRONG^^^
           bgSize = "cover"
           bgPosition="center -10"
@@ -90,39 +118,13 @@ function StoryPage() {
             zIndex={1}
             />
           <Box zIndex={2}>
-          <Typewriter
-            key={optNum}
-            onInit={(typewriter) => {
-              typewriter.callFunction(() => { setIsTyping(true) });
-              // Parses reponse into paragraphs
-              getResponse()
-              response.split('\n')
-                      .map((par) => par.trim())
-                      .filter((par) => {
-                        if (!(par === "")) {
-                          return true;
-                        } else {
-                          return false;
-                        }})
-                      // Maps paragraphs into strings to be typed and renders images via dall-e
-                      .forEach((par) => {
-                        typewriter.callFunction(() => { callDallE(par) }) 
-                        typewriter.typeString(par)
-                        typewriter.deleteAll()
-              typewriter.start();
-              typewriter.callFunction(() => { setIsTyping(false) });
-              }
-            )}}
-            options = {{
-              deleteSpeed: 0,
-              delay: 75,
-              cursor: "|",
-            }}               
-          /></Box>
-          { isTyping 
+            { createTypewriter(callType.START) }
+</Box>
+          {/* { isTyping 
                   ? null
-                  : <ChoiceComponant handleData={branch}></ChoiceComponant>
-              }
+                  : <ChoiceComponant></ChoiceComponant>
+              } */}
+              { <ChoiceComponant></ChoiceComponant>}
           
           </Flex>
         </Box>
