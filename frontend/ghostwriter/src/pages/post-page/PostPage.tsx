@@ -39,7 +39,7 @@ const app = initializeApp(firebaseConfig);
 
 let userDataMap = new Map<string, any>();
 
-function writeEnum(nameInput1: string, nameInput2: string, nameInput3: string, 
+function onSubmit(nameInput1: string, nameInput2: string, nameInput3: string, 
   nameInput4: string, nameInput5: string, cityInput: string, selectedStory: string) {
     // TODO: write this function
     const names = new Array<string>;
@@ -148,7 +148,7 @@ export default function SimpleCard() {
                 }}
                 onClick={() => {
                   const id = Math.round(Math.random()*999999) //noncontinuous
-                  writeEnum(nameInput1, nameInput2, nameInput3, nameInput4, nameInput5, cityInput, selectedStory)
+                  onSubmit(nameInput1, nameInput2, nameInput3, nameInput4, nameInput5, cityInput, selectedStory)
                       }
                   }
                 >
